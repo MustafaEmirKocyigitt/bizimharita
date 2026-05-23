@@ -188,34 +188,28 @@ export default function GalleryComponent({
   }
 
   return (
-    <div className="w-full min-h-screen pt-24 pb-24 overflow-y-auto px-4 sm:px-6 bg-[#FFFDF9]">
+    <div className="w-full pb-28 px-4 sm:px-6">
       
-      {/* Üst Kısım - Başlık ve Arama (Premium Glassmorphic Tasarım) */}
-      <div className="max-w-6xl mx-auto mb-8">
-        <div className="backdrop-blur-md bg-white/70 border border-white/40 shadow-sm rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#3D3A45] tracking-tight flex items-center gap-2">
-              Aşkımızın Galerisi <Camera size={26} className="text-[#E5989B] animate-pulse" />
-            </h1>
-            <p className="text-xs sm:text-sm text-[#3D3A45]/70 mt-1.5">
-              Ortak anılarımızın en güzel anlarını tek bir yerde keşfedin.
-            </p>
-          </div>
-
-          {/* Premium Arama Girişi */}
-          <div className="relative w-full md:w-72 shrink-0">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#3D3A45]/40">
-              <Search size={18} />
-            </div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Anılarda ara..."
-              className="block w-full pl-11 pr-4 py-3 bg-white/90 border border-white/50 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all shadow-xs"
-            />
-          </div>
+      {/* Zarif Arama Kutusu (Kompakt ve Premium) */}
+      <div className="relative w-full mb-6 shrink-0">
+        <div className="absolute inset-y-0 left-0 pl-4.5 flex items-center pointer-events-none text-[#E5989B]">
+          <Search size={15} className="animate-pulse" />
         </div>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Fotoğraflı anılarda arama yapın..."
+          className="block w-full pl-11 pr-10 py-3 bg-white/90 border border-pink-100/45 rounded-full text-xs font-semibold text-[#3D3A45] placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/40 focus:border-transparent shadow-2xs focus:shadow-[0_0_15px_rgba(229,152,155,0.18)] transition-all duration-300"
+        />
+        {searchTerm && (
+          <button 
+            onClick={() => setSearchTerm('')}
+            className="absolute right-4 top-3.5 text-[#B56576] hover:text-red-500 cursor-pointer transition-colors"
+          >
+            <X size={14} />
+          </button>
+        )}
       </div>
 
       {/* 🌟 Kategori Filtreleme Slider'ı (Premium Glassmorphic + Soft Pills) */}
