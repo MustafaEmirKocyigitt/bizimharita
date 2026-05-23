@@ -198,6 +198,33 @@ export default function Dashboard({ profile }: { profile: Profile }) {
     }
   }, [myProfile.couple_id, myProfile.partner_id])
 
+  // Realtime Kendi Profil Değişiklikleri Dinleyicisi (Eşleşme İptali durumunda anında onboarding'e yönlendirir)
+  useEffect(() => {
+    const channel = supabase
+      .channel(`my_profile_realtime_${myProfile.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${myProfile.id}`,
+        },
+        (payload: any) => {
+          const updatedProfile = payload.new as Profile
+          // Eğer couple_id veya partner_id null olduysa (yani eşleşme iptal edildiyse!)
+          if (!updatedProfile.couple_id) {
+            router.refresh() // Onboarding ekranına geri fırlat!
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [myProfile.id])
+
   // Kategori Filtreleme
   const handleCategoryFilter = (catId: string) => {
     setActiveCategory(catId)
