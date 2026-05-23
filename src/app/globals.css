@@ -1,26 +1,80 @@
+@import "leaflet/dist/leaflet.css";
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FFFDF9;
+  --foreground: #3D3A45;
+  --primary: #E5989B;
+  --primary-hover: #B56576;
+  --card-bg: rgba(255, 255, 255, 0.75);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-card-bg: var(--card-bg);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for lovely look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFDF9;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5989B;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B56576;
+}
+
+/* Leaflet custom styling */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background-color: #f4ede2 !important;
+  font-family: inherit;
+  z-index: 10;
+}
+
+.leaflet-bar {
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(61, 58, 69, 0.08) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: #ffffff !important;
+  color: #3D3A45 !important;
+  border-bottom: 1px solid #f4ede2 !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: #FFFDF9 !important;
+  color: #B56576 !important;
+}
+
+/* Custom Heart Marker style */
+.custom-heart-marker {
+  background: none;
+  border: none;
+}
+.heart-pin-wrapper {
+  filter: drop-shadow(0 3px 5px rgba(181, 101, 118, 0.3));
+  transition: transform 0.2s ease;
+}
+.heart-pin-wrapper:hover {
+  transform: scale(1.15);
 }

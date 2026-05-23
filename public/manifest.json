@@ -1,0 +1,24 @@
+{
+  "name": "Bizim Harita",
+  "short_name": "BizimHarita",
+  "description": "Çiftlerin birlikte gezdikleri yerleri ve oluşturdukları anıları biriktirdiği özel dijital harita.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFDF9",
+  "theme_color": "#FFFDF9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
