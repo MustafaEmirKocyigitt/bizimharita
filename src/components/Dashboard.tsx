@@ -667,56 +667,113 @@ export default function Dashboard({ profile }: { profile: Profile }) {
         </AnimatePresence>
       </main>
 
-      {/* Alt Navigasyon Barı (Bottom Navigation) */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-[#3D3A45]/5 px-4 sm:px-6 py-2 flex justify-around items-center z-40 shadow-[0_-4px_24px_rgba(61,58,69,0.04)] shrink-0">
-        <button
-          onClick={() => setActiveTab('map')}
-          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'map' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
-        >
-          <MapIcon size={18} className={`sm:size-[20px] ${activeTab === 'map' ? 'scale-110 transition-transform' : ''}`} />
-          <span className="text-[9px] sm:text-[10px] font-semibold">Harita</span>
-        </button>
+      {/* Alt Navigasyon Barı (Bottom Navigation) - Yüzen Premium Aşk Adası (Floating Capsule) */}
+      <div className="fixed bottom-5 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[560px] z-40 shrink-0">
+        <nav className="relative bg-white/85 backdrop-blur-2xl border border-white/60 px-2 sm:px-4 py-2.5 flex justify-around items-center rounded-3xl shadow-[0_12px_45px_rgba(61,58,69,0.08)]">
+          
+          <button
+            onClick={() => setActiveTab('map')}
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+          >
+            {activeTab === 'map' && (
+              <motion.div
+                layoutId="activeTabPill"
+                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            <MapIcon size={18} className={`transition-all duration-300 ${activeTab === 'map' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'map' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
+              Harita
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('timeline')}
-          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'timeline' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
-        >
-          <Clock size={18} className={`sm:size-[20px] ${activeTab === 'timeline' ? 'scale-110 transition-transform' : ''}`} />
-          <span className="text-[9px] sm:text-[10px] font-semibold">Timeline</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('timeline')}
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+          >
+            {activeTab === 'timeline' && (
+              <motion.div
+                layoutId="activeTabPill"
+                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            <Clock size={18} className={`transition-all duration-300 ${activeTab === 'timeline' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'timeline' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
+              Timeline
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('gallery')}
-          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'gallery' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
-        >
-          <Camera size={18} className={`sm:size-[20px] ${activeTab === 'gallery' ? 'scale-110 transition-transform' : ''}`} />
-          <span className="text-[9px] sm:text-[10px] font-semibold">Galeri</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('gallery')}
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+          >
+            {activeTab === 'gallery' && (
+              <motion.div
+                layoutId="activeTabPill"
+                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            <Camera size={18} className={`transition-all duration-300 ${activeTab === 'gallery' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'gallery' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
+              Galeri
+            </span>
+          </button>
 
-        {/* Ekleme Butonu (Ortada, drawer'i tetikler) */}
-        <button
-          onClick={() => setIsAddOpen(true)}
-          className="relative -top-5 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-[0_4px_20px_0_rgba(229,152,155,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer z-50 shrink-0"
-        >
-          <Plus size={20} className="sm:size-[24px]" />
-        </button>
+          {/* Ekleme Butonu (Ortada, halo parıltılı) */}
+          <div className="relative -top-6 shrink-0">
+            <motion.div
+              animate={{ scale: [1, 1.08, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="absolute -inset-1.5 bg-gradient-to-tr from-[#E5989B]/20 to-[#B56576]/20 rounded-full blur-xs -z-10"
+            />
+            <button
+              onClick={() => setIsAddOpen(true)}
+              className="flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-[0_6px_25px_0_rgba(229,152,155,0.45)] hover:scale-108 active:scale-95 transition-all cursor-pointer z-50 shrink-0"
+            >
+              <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.3 }} className="flex items-center justify-center">
+                <Plus size={20} className="sm:size-[22px]" />
+              </motion.div>
+            </button>
+          </div>
 
-        <button
-          onClick={() => setActiveTab('wishlist')}
-          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'wishlist' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
-        >
-          <Star size={18} className={`sm:size-[20px] ${activeTab === 'wishlist' ? 'scale-110 transition-transform' : ''}`} />
-          <span className="text-[9px] sm:text-[10px] font-semibold">Wishlist</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('wishlist')}
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+          >
+            {activeTab === 'wishlist' && (
+              <motion.div
+                layoutId="activeTabPill"
+                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            <Star size={18} className={`transition-all duration-300 ${activeTab === 'wishlist' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'wishlist' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
+              Dilekler
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('profile')}
-          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'profile' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
-        >
-          <User size={18} className={`sm:size-[20px] ${activeTab === 'profile' ? 'scale-110 transition-transform' : ''}`} />
-          <span className="text-[9px] sm:text-[10px] font-semibold">Profil</span>
-        </button>
-      </nav>
+          <button
+            onClick={() => setActiveTab('profile')}
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+          >
+            {activeTab === 'profile' && (
+              <motion.div
+                layoutId="activeTabPill"
+                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            <User size={18} className={`transition-all duration-300 ${activeTab === 'profile' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'profile' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
+              Profil
+            </span>
+          </button>
+        </nav>
+      </div>
 
       {/* Drawer Pencereleri */}
       <AddEntryDrawer
