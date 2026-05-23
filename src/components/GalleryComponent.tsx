@@ -190,7 +190,7 @@ export default function GalleryComponent({
   return (
     <div className="w-full pb-28 px-4 sm:px-6">
       
-      {/* Zarif Arama Kutusu (Kompakt ve Premium) */}
+      {/* Zarif Arama Kutusu (Kompakt, Premium ve Dokunsal) */}
       <div className="relative w-full mb-6 shrink-0">
         <div className="absolute inset-y-0 left-0 pl-4.5 flex items-center pointer-events-none text-[#E5989B]">
           <Search size={15} className="animate-pulse" />
@@ -200,7 +200,7 @@ export default function GalleryComponent({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Fotoğraflı anılarda arama yapın..."
-          className="block w-full pl-11 pr-10 py-3 bg-white/90 border border-pink-100/45 rounded-full text-xs font-semibold text-[#3D3A45] placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/40 focus:border-transparent shadow-2xs focus:shadow-[0_0_15px_rgba(229,152,155,0.18)] transition-all duration-300"
+          className="block w-full pl-11 pr-10 py-3 rounded-full text-xs font-semibold text-[#3D3A45] placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-transparent shadow-clay-input transition-all duration-300"
         />
         {searchTerm && (
           <button 
@@ -219,18 +219,19 @@ export default function GalleryComponent({
           const isActive = activeCategory === cat.id
           
           return (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.94 }}
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-1.5 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 border shadow-xs ${
+              className={`flex items-center gap-1.5 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 border ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#E5989B] to-[#B56576] text-white border-transparent scale-[1.03] shadow-[0_4px_12px_rgba(229,152,155,0.3)]'
-                  : 'bg-white/80 border-white/50 text-[#3D3A45]/60 hover:text-[#3D3A45] hover:bg-white'
+                  ? 'bg-gradient-to-r from-[#E5989B] to-[#B56576] text-white border-transparent shadow-clay-inset scale-[1.01]'
+                  : 'shadow-clay-card border-stitched text-[#3D3A45]/60 hover:text-[#3D3A45] hover:bg-white'
               }`}
             >
               <Icon size={14} />
               <span>{cat.label}</span>
-            </button>
+            </motion.button>
           )
         })}
       </div>
@@ -285,9 +286,10 @@ export default function GalleryComponent({
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={{ y: -5 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 20 }}
                     onClick={() => setSelectedItem(item)}
-                    className="group relative aspect-square rounded-3xl overflow-hidden border-2 border-white shadow-sm hover:shadow-lg cursor-zoom-in transition-all duration-300 hover:scale-[1.02]"
+                    className="group relative aspect-square rounded-3xl overflow-hidden shadow-clay-card border-stitched cursor-zoom-in transition-all duration-300"
                   >
                     {/* Arka Plan Görseli */}
                     <img
@@ -348,14 +350,14 @@ export default function GalleryComponent({
               <X size={20} />
             </button>
 
-            {/* Lightbox Kartı */}
+            {/* Lightbox Kartı (Dokunsal & Yaylı) */}
             <motion.div
-              initial={{ scale: 0.95, y: 20 }}
+              initial={{ scale: 0.92, y: 15 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              exit={{ scale: 0.92, y: 15 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
               onClick={(e) => e.stopPropagation()} // Dışarı tıklama kapatmasını önle
-              className="w-full max-w-4xl bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row text-[#3D3A45]"
+              className="w-full max-w-4xl bg-white rounded-[2rem] overflow-hidden shadow-clay-card border-stitched flex flex-col md:flex-row text-[#3D3A45]"
             >
               {/* Sol/Üst: Fotoğraf Alanı */}
               <div className="relative flex-1 bg-black aspect-video md:aspect-auto md:h-[600px] flex items-center justify-center group/img">

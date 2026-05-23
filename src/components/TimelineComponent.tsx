@@ -324,8 +324,8 @@ export default function TimelineComponent({
           <p className="text-[9px] text-[#3D3A45]/50 font-bold uppercase tracking-wider pl-0.5">Aşk arşivimiz</p>
         </div>
         
-        {/* Seçici Switch (Framer Motion sliding pill) */}
-        <div className="bg-white/80 border border-white/60 p-1 rounded-full flex gap-1 shadow-xs relative">
+        {/* Seçici Switch (Framer Motion sliding pill - Dokunsal) */}
+        <div className="shadow-clay-inset border-stitched p-1 rounded-full flex gap-1 relative bg-[#FFFDF9]">
           <button
             onClick={() => setViewMode('feed')}
             className={`relative px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer shrink-0 z-10 ${viewMode === 'feed' ? 'text-white' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
@@ -611,12 +611,14 @@ export default function TimelineComponent({
                           className="absolute left-[24px] top-6.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#E5989B] z-10 transition-colors group-hover:border-[#B56576] group-hover:bg-[#FFF5F5]" 
                         />
 
-                        {/* Anı Kartı Tasarımı (Pro-Max WOW Detayları) */}
-                        <div 
-                          className={`backdrop-blur-md bg-white/80 border rounded-[2rem] p-5 md:p-6 shadow-[0_6px_25px_rgba(61,58,69,0.02)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_10px_35px_rgba(229,152,155,0.07)] hover:border-pink-100/50 ${
+                        {/* Anı Kartı Tasarımı (Pro-Max WOW Detayları - Dokunsal & Yaylı) */}
+                        <motion.div 
+                          whileHover={{ y: -6 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                          className={`shadow-clay-card rounded-[2rem] p-5 md:p-6 transition-all duration-300 ${
                             isSpecial 
-                              ? 'border-[#FFB703] shadow-[0_6px_30px_rgba(255,183,3,0.12)] ring-1 ring-[#FFB703]/25 relative overflow-hidden' 
-                              : 'border-white/70'
+                              ? 'border-[#FFB703]/60 border-dashed relative overflow-hidden shadow-[inset_0_0_12px_rgba(255,183,3,0.05)]' 
+                              : 'border-stitched'
                           }`}
                         >
                           {isSpecial && (
@@ -692,7 +694,7 @@ export default function TimelineComponent({
                             )}
                           </div>
 
-                        </div>
+                        </motion.div>
                       </motion.div>
                     )
                   })}

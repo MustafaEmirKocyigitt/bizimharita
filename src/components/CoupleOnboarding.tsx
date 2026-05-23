@@ -270,13 +270,16 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
     <main className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-tr from-[#FFFDF9] via-[#FFEBE9] to-[#FFF5F5] overflow-x-hidden py-16 sm:py-8">
       
       {/* Cikis Yap Butonu */}
-      <button
+      <motion.button
         onClick={handleSignOut}
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-1.5 py-2 px-3 sm:py-2.5 sm:px-4 bg-white/70 backdrop-blur-md hover:bg-white/90 border border-[#3D3A45]/10 hover:border-[#3D3A45]/20 text-xs sm:text-sm font-semibold rounded-xl sm:rounded-2xl transition-all cursor-pointer text-[#3D3A45]/70 hover:text-[#3D3A45] shadow-sm"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.94 }}
+        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-1.5 py-2 px-3 sm:py-2.5 sm:px-4 bg-white hover:bg-[#FFFDF9] border border-white/60 text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl transition-all cursor-pointer text-[#3D3A45]/70 hover:text-[#B56576] shadow-clay-card border-stitched"
       >
         <LogOut size={14} className="sm:size-4" />
         <span>Çıkış Yap</span>
-      </button>
+      </motion.button>
 
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {[...Array(4)].map((_, i) => (
@@ -296,44 +299,53 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl relative"
+        transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+        className="w-full max-w-xl relative z-10"
       >
-        <div className="absolute inset-0 bg-[#E5989B]/5 blur-3xl rounded-3xl -z-10" />
-
-        <div className="backdrop-blur-md bg-white/70 border border-white/40 shadow-[0_8px_32px_0_rgba(229,152,155,0.08)] rounded-3xl p-8 md:p-10 text-[#3D3A45]">
+        <div className="bg-white shadow-clay-card border-stitched rounded-[2.25rem] p-8 md:p-10 text-[#3D3A45] relative">
           
           <div className="text-center mb-8">
             <motion.div 
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#FFF5F5] border border-[#FFEBE9] text-[#E5989B] mb-4"
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#FFF5F5] border border-[#FFEBE9]/60 text-[#E5989B] mb-4 shadow-clay-card border-stitched"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
               animate={{ scale: [1, 1.05, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
+              transition={{ scale: { repeat: Infinity, duration: 2.2, ease: "easeInOut" } }}
             >
-              <Heart size={32} fill="currentColor" />
+              <Heart size={30} fill="currentColor" className="animate-pulse" />
             </motion.div>
             <h1 className="text-3xl font-bold tracking-tight text-[#3D3A45] mb-2 flex items-center justify-center gap-2">
               Merhaba, {profile.display_name}! 👋
             </h1>
-            <p className="text-sm text-[#3D3A45]/70">
+            <p className="text-sm text-[#3D3A45]/70 font-medium">
               Haritanızı oluşturmaya başlamak için partnerinizle eşleşmeniz gerekiyor.
             </p>
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 p-4 mb-6 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-3 p-4 mb-6 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm shadow-clay-inset"
+            >
               <Heart size={16} className="shrink-0" />
-              <span>{error}</span>
-            </div>
+              <span className="font-medium">{error}</span>
+            </motion.div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mt-6">
             
             {/* Secenek A: Davet Kodu Olustur */}
-            <div className="flex flex-col justify-between p-6 rounded-2xl bg-white/80 border border-white/50 shadow-sm">
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="flex flex-col justify-between p-6 rounded-2xl bg-[#FFFDF9] border-stitched shadow-clay-card relative"
+            >
               <div>
-                <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                <h3 className="font-bold text-lg mb-2 flex items-center gap-2 text-[#3D3A45]">
                   1. Davet Et <Sparkles size={16} className="text-[#E5989B]" />
                 </h3>
-                <p className="text-xs text-[#3D3A45]/70 mb-6">
+                <p className="text-xs text-[#3D3A45]/70 mb-6 font-medium">
                   Bir davet kodu oluşturun ve eşleşmek üzere partnerinize gönderin.
                 </p>
               </div>
@@ -347,7 +359,10 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
                     exit={{ opacity: 0 }}
                     onClick={handleCreateCouple}
                     disabled={loading}
-                    className="w-full py-3.5 bg-[#E5989B] hover:bg-[#B56576] text-white font-semibold rounded-2xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.94 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    className="w-full py-3.5 bg-[#E5989B] hover:bg-[#B56576] text-white font-bold rounded-2xl shadow-clay-button border border-white/30 transition-all cursor-pointer flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -366,57 +381,68 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
                     exit={{ opacity: 0 }}
                     className="space-y-4"
                   >
-                    <div className="p-3 bg-[#FFFDF9] border border-[#FFEBE9] rounded-2xl text-center">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/50">
+                    <div className="p-3 shadow-clay-inset bg-white rounded-2xl text-center border border-pink-100/10">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#3D3A45]/50">
                         KODUNUZ
                       </span>
-                      <div className="text-2xl font-bold tracking-widest text-[#B56576] py-1 select-all">
+                      <div className="text-2xl font-black tracking-widest text-[#B56576] py-1 select-all">
                         {inviteCode}
                       </div>
                     </div>
 
                     <div className="flex gap-2">
-                      <button
+                      <motion.button
                         onClick={copyToClipboard}
-                        className="flex-1 py-3 px-2 bg-[#FFF5F5] hover:bg-[#FFEBE9] text-[#B56576] font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.93 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        className="flex-1 py-3 px-2 bg-white text-[#B56576] font-bold text-xs rounded-xl shadow-clay-card border border-white/60 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
                         <span>{copied ? 'Kopyalandı' : 'Kopyala'}</span>
-                      </button>
+                      </motion.button>
 
-                      <button
+                      <motion.button
                         onClick={shareOnWhatsapp}
-                        className="flex-1 py-3 px-2 bg-[#FFF5F5] hover:bg-[#FFEBE9] text-[#B56576] font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.93 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        className="flex-1 py-3 px-2 bg-white text-[#B56576] font-bold text-xs rounded-xl shadow-clay-card border border-white/60 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Share2 size={14} />
                         <span>Paylaş</span>
-                      </button>
+                      </motion.button>
                     </div>
 
-                    <p className="text-[10px] text-center text-[#3D3A45]/50 animate-pulse">
+                    <p className="text-[10px] text-center text-[#3D3A45]/50 animate-pulse font-bold">
                       Partnerinizin daveti onaylaması bekleniyor...
                     </p>
 
-                    <button
+                    <motion.button
                       onClick={handleCancelInvite}
                       disabled={loading}
-                      className="w-full py-2 bg-transparent hover:bg-red-50 text-red-500 font-medium text-xs rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-2 bg-transparent hover:bg-red-50/60 text-red-500 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <Trash2 size={12} />
                       <span>İptal Et</span>
-                    </button>
+                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
 
             {/* Secenek B: Davet Kodu Gir */}
-            <div className="flex flex-col justify-between p-6 rounded-2xl bg-white/80 border border-white/50 shadow-sm">
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="flex flex-col justify-between p-6 rounded-2xl bg-[#FFFDF9] border-stitched shadow-clay-card relative"
+            >
               <div>
-                <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                <h3 className="font-bold text-lg mb-2 flex items-center gap-2 text-[#3D3A45]">
                   2. Davete Katıl <Send size={16} className="text-[#E5989B]" />
                 </h3>
-                <p className="text-xs text-[#3D3A45]/70 mb-6">
+                <p className="text-xs text-[#3D3A45]/70 mb-6 font-medium">
                   Partnerinizin oluşturup size gönderdiği davet kodunu aşağıya girin.
                 </p>
               </div>
@@ -429,13 +455,16 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
                   value={inputCode}
                   onChange={(e) => setInputCode(e.target.value)}
                   placeholder="KODU BURAYA YAZIN"
-                  className="block w-full text-center tracking-widest font-bold text-lg uppercase py-3 bg-[#FFFDF9] border border-white/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="block w-full text-center tracking-widest font-extrabold text-lg uppercase py-3 shadow-clay-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#E5989B]/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 />
 
-                <button
+                <motion.button
                   type="submit"
                   disabled={!!inviteCode || loading || !inputCode.trim()}
-                  className="w-full py-3.5 bg-[#B56576] hover:bg-[#E5989B] disabled:bg-gray-100 disabled:text-gray-400 text-white font-semibold rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  className="w-full py-3.5 bg-[#B56576] hover:bg-[#E5989B] disabled:bg-gray-100 disabled:text-gray-400 text-white font-bold rounded-2xl shadow-clay-button border border-white/20 transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -445,9 +474,9 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
                       <Sparkles size={16} />
                     </>
                   )}
-                </button>
+                </motion.button>
               </form>
-            </div>
+            </motion.div>
 
           </div>
 

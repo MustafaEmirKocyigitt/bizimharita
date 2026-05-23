@@ -362,7 +362,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
     <div className="min-h-screen flex flex-col bg-[#FFFDF9] text-[#3D3A45] relative">
       
       {/* Üst Bar (Header) - Yüzen Premium Navbar (UI/UX Pro Max) */}
-      <header className="absolute top-4 left-4 right-4 bg-white/85 backdrop-blur-xl border border-white/80 px-4.5 py-3.5 flex items-center justify-between z-30 rounded-3xl shadow-[0_10px_35px_rgba(61,58,69,0.06)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(61,58,69,0.08)]">
+      <header className="absolute top-4 left-4 right-4 shadow-clay-card border-stitched px-4.5 py-3.5 flex items-center justify-between z-30 rounded-3xl">
         <div className="flex items-center gap-2.5">
           <motion.div
             animate={{ scale: [1, 1.18, 1] }}
@@ -653,18 +653,19 @@ export default function Dashboard({ profile }: { profile: Profile }) {
         </AnimatePresence>
       </main>
 
-      {/* Alt Navigasyon Barı (Bottom Navigation) - Yüzen Premium Aşk Adası (Floating Capsule) */}
+      {/* Alt Navigasyon Barı (Bottom Navigation) - Yüzen Premium Aşk Adası (Floating Capsule - Dokunsal) */}
       <div className="fixed bottom-5 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-40 shrink-0">
-        <nav className="relative bg-white/85 backdrop-blur-2xl border border-white/60 px-3 sm:px-5 py-2.5 flex justify-between items-center rounded-3xl shadow-[0_12px_45px_rgba(61,58,69,0.08)]">
+        <nav className="relative shadow-clay-card border-stitched px-3 sm:px-5 py-2.5 flex justify-between items-center rounded-3xl">
           
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
             onClick={() => setActiveTab('map')}
             className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'map' && (
               <motion.div
                 layoutId="activeTabPill"
-                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                className="absolute inset-0 shadow-clay-inset border-stitched rounded-2xl -z-10"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
@@ -672,16 +673,17 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'map' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
               Harita
             </span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
             onClick={() => setActiveTab('timeline')}
             className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'timeline' && (
               <motion.div
                 layoutId="activeTabPill"
-                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                className="absolute inset-0 shadow-clay-inset border-stitched rounded-2xl -z-10"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
@@ -689,33 +691,30 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'timeline' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
               Anılar
             </span>
-          </button>
+          </motion.button>
 
-          {/* Ekleme Butonu (Ortada, halo parıltılı) */}
+          {/* Ekleme Butonu (Ortada, yaylı zıplama reaksiyonu) */}
           <div className="relative -top-6 shrink-0 mx-2">
-            <motion.div
-              animate={{ scale: [1, 1.08, 1] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="absolute -inset-1.5 bg-gradient-to-tr from-[#E5989B]/20 to-[#B56576]/20 rounded-full blur-xs -z-10"
-            />
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
               onClick={() => setIsAddOpen(true)}
-              className="flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-[0_6px_25px_0_rgba(229,152,155,0.45)] hover:scale-108 active:scale-95 transition-all cursor-pointer z-50 shrink-0"
+              className="flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-clay-button cursor-pointer z-50 shrink-0"
             >
-              <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.3 }} className="flex items-center justify-center">
-                <Plus size={20} className="sm:size-[22px]" />
-              </motion.div>
-            </button>
+              <Plus size={20} className="sm:size-[22px]" />
+            </motion.button>
           </div>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
             onClick={() => setActiveTab('wishlist')}
             className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'wishlist' && (
               <motion.div
                 layoutId="activeTabPill"
-                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                className="absolute inset-0 shadow-clay-inset border-stitched rounded-2xl -z-10"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
@@ -723,16 +722,17 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'wishlist' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
               Dilekler
             </span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
             onClick={() => setActiveTab('profile')}
             className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'profile' && (
               <motion.div
                 layoutId="activeTabPill"
-                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
+                className="absolute inset-0 shadow-clay-inset border-stitched rounded-2xl -z-10"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
@@ -740,7 +740,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'profile' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
               Profil
             </span>
-          </button>
+          </motion.button>
         </nav>
       </div>
 

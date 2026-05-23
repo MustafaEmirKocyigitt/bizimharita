@@ -112,26 +112,26 @@ export default function RegisterPage() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative w-full max-w-md"
+        transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+        className="relative w-full max-w-md z-10"
       >
-        <div className="absolute inset-0 bg-[#E5989B]/10 blur-3xl rounded-3xl -z-10" />
-
         {/* Form Karti */}
-        <div className="backdrop-blur-md bg-white/70 border border-white/40 shadow-[0_8px_32px_0_rgba(229,152,155,0.08)] rounded-3xl p-8 md:p-10 text-[#3D3A45]">
+        <div className="bg-white shadow-clay-card border-stitched rounded-[2.25rem] p-8 md:p-10 text-[#3D3A45] relative">
           
           {/* Logo / Baslik */}
           <div className="text-center mb-8">
             <motion.div 
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#FFF5F5] border border-[#FFEBE9] text-[#E5989B] mb-4"
-              whileHover={{ scale: 1.05 }}
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#FFF5F5] border border-[#FFEBE9]/60 text-[#E5989B] mb-4 shadow-clay-card border-stitched cursor-pointer"
+              whileHover={{ scale: 1.08, rotate: [0, -10, 10, -10, 0] }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
-              <Heart size={32} fill="currentColor" className="animate-pulse" />
+              <Heart size={30} fill="currentColor" className="animate-pulse" />
             </motion.div>
             <h1 className="text-3xl font-bold tracking-tight text-[#3D3A45] mb-2 flex items-center justify-center gap-2">
               Bizim Harita <Sparkles size={20} className="text-[#E5989B]" />
             </h1>
-            <p className="text-sm text-[#3D3A45]/70">
+            <p className="text-sm text-[#3D3A45]/70 font-medium">
               Ortak anı arşivinizi oluşturmak için ilk adımı atın.
             </p>
           </div>
@@ -141,18 +141,33 @@ export default function RegisterPage() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-6"
+              className="text-center py-4"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 mb-4">
-                <CheckCircle2 size={28} />
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 mb-4 shadow-clay-inset">
+                <CheckCircle2 size={24} />
               </div>
               <h3 className="text-lg font-bold mb-2">Harika! Kayıt Oluşturuldu.</h3>
-              <p className="text-sm text-[#3D3A45]/70 mb-6">
+              <p className="text-sm text-[#3D3A45]/70 mb-4 font-medium">
                 Hesabınızı doğrulamak için e-posta kutunuzu (gelen veya spam kutusunu) kontrol edin. Doğrulama adımından sonra giriş yapabilirsiniz.
               </p>
+
+              {/* 💡 Safari/Mobil Onay Bilgilendirme Karti */}
+              <div className="shadow-clay-inset bg-[#FFFDF9] border-stitched p-4 text-left text-xs text-[#B56576] rounded-2xl mb-6 flex flex-col gap-2 leading-relaxed">
+                <div className="flex items-center gap-1.5 font-bold">
+                  <Sparkles size={14} className="shrink-0 animate-pulse text-[#E5989B]" />
+                  <span>Safari & Mobil Bağlantı Uyarısı</span>
+                </div>
+                <p className="opacity-85 font-medium">
+                  E-posta onay linkine telefonunuzdan tıkladığınızda "Sunucuya bağlanamadı" uyarısı alırsanız endişelenmeyin! Bu, uygulamanın yerel geliştirme ortamında olmasından kaynaklanır. 
+                </p>
+                <p className="opacity-95 font-bold">
+                  Linke tıklamanız hesabınızı doğrulamak için yeterlidir. Doğrudan bilgisayarınızdaki sekmeden giriş yapabilirsiniz. ❤️
+                </p>
+              </div>
+
               <Link
                 href="/login"
-                className="inline-block w-full py-3.5 px-6 bg-[#E5989B] hover:bg-[#B56576] text-white font-semibold rounded-2xl transition-all text-center"
+                className="inline-block w-full py-3.5 px-6 bg-[#E5989B] hover:bg-[#B56576] text-white font-bold rounded-2xl shadow-clay-button border border-white/30 text-center transition-all cursor-pointer"
               >
                 Giriş Ekranına Git
               </Link>
@@ -164,17 +179,17 @@ export default function RegisterPage() {
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center gap-3 p-4 mb-6 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm"
+                  className="flex items-center gap-3 p-4 mb-6 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm shadow-clay-inset"
                 >
                   <AlertCircle size={18} className="shrink-0" />
-                  <span>{error}</span>
+                  <span className="font-medium">{error}</span>
                 </motion.div>
               )}
 
               {/* Form */}
               <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
                     Adınız (Partnerinizin Göreceği İsim)
                   </label>
                   <div className="relative">
@@ -187,13 +202,13 @@ export default function RegisterPage() {
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Leyla / Mecnun"
-                      className="block w-full pl-11 pr-4 py-3.5 bg-white/90 border border-white/50 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                      className="block w-full pl-11 pr-4 py-3.5 shadow-clay-input rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/20 transition-all duration-200"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
                     E-posta Adresiniz
                   </label>
                   <div className="relative">
@@ -206,13 +221,13 @@ export default function RegisterPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="leyla@mecnun.com"
-                      className="block w-full pl-11 pr-4 py-3.5 bg-white/90 border border-white/50 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                      className="block w-full pl-11 pr-4 py-3.5 shadow-clay-input rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/20 transition-all duration-200"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
                     Şifreniz
                   </label>
                   <div className="relative">
@@ -225,13 +240,13 @@ export default function RegisterPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="block w-full pl-11 pr-4 py-3.5 bg-white/90 border border-white/50 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                      className="block w-full pl-11 pr-4 py-3.5 shadow-clay-input rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/20 transition-all duration-200"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
                     Şifrenizi Onaylayın
                   </label>
                   <div className="relative">
@@ -244,7 +259,7 @@ export default function RegisterPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="block w-full pl-11 pr-4 py-3.5 bg-white/90 border border-white/50 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                      className="block w-full pl-11 pr-4 py-3.5 shadow-clay-input rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/20 transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -252,8 +267,10 @@ export default function RegisterPage() {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  whileTap={{ scale: 0.98 }}
-                  className="relative w-full py-4 px-6 mt-4 bg-[#E5989B] hover:bg-[#B56576] active:bg-[#B56576] text-white font-semibold rounded-2xl shadow-[0_4px_20px_0_rgba(229,152,155,0.3)] hover:shadow-[0_4px_25px_0_rgba(181,101,118,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 overflow-hidden"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  className="relative w-full py-4 px-6 mt-4 bg-[#E5989B] hover:bg-[#B56576] active:bg-[#B56576] text-white font-bold rounded-2xl shadow-clay-button border border-white/30 transition-all cursor-pointer flex items-center justify-center gap-2 overflow-hidden"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -267,9 +284,9 @@ export default function RegisterPage() {
               </form>
 
               {/* Alt Bilgi */}
-              <div className="text-center mt-8 pt-6 border-t border-[#3D3A45]/5 text-sm text-[#3D3A45]/70">
+              <div className="text-center mt-8 pt-6 border-t border-dashed border-[#3D3A45]/10 text-sm text-[#3D3A45]/70">
                 Zaten bir hesabınız var mı?{' '}
-                <Link href="/login" className="font-semibold text-[#B56576] hover:text-[#E5989B] transition-colors pl-1">
+                <Link href="/login" className="font-bold text-[#B56576] hover:text-[#E5989B] transition-colors pl-1">
                   Giriş Yapın
                 </Link>
               </div>
