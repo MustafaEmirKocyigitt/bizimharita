@@ -26,6 +26,7 @@ import AddEntryDrawer from '@/components/AddEntryDrawer'
 import PlaceDetailDrawer from '@/components/PlaceDetailDrawer'
 import TimelineComponent from '@/components/TimelineComponent'
 import WishlistComponent from '@/components/WishlistComponent'
+import GalleryComponent from '@/components/GalleryComponent'
 
 interface Profile {
   id: string
@@ -66,7 +67,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
 
   // Durumlar
   const [myProfile, setMyProfile] = useState<Profile>(profile)
-  const [activeTab, setActiveTab] = useState<'map' | 'timeline' | 'add' | 'wishlist' | 'profile'>('map')
+  const [activeTab, setActiveTab] = useState<'map' | 'timeline' | 'add' | 'gallery' | 'wishlist' | 'profile'>('map')
   const [partnerProfile, setPartnerProfile] = useState<Profile | null>(null)
   const [partnerOnline, setPartnerOnline] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -507,6 +508,27 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             </motion.div>
           )}
 
+          {activeTab === 'gallery' && (
+            <motion.div
+              key="gallery-tab"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex-1 w-full h-full"
+            >
+              <GalleryComponent
+                coupleId={myProfile.couple_id || ''}
+                onShowOnMap={(lat, lng) => {
+                  setMapCenter([lat, lng])
+                  setMapZoom(14)
+                }}
+                onActiveTabChange={setActiveTab}
+                onSelectEntry={setSelectedEntry}
+                onOpenDetail={setIsDetailOpen}
+              />
+            </motion.div>
+          )}
+
           {activeTab === 'profile' && (
             <motion.div
               key="profile-tab"
@@ -640,45 +662,53 @@ export default function Dashboard({ profile }: { profile: Profile }) {
       </main>
 
       {/* Alt Navigasyon Barı (Bottom Navigation) */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-[#3D3A45]/5 px-6 py-2 flex justify-around items-center z-40 shadow-[0_-4px_24px_rgba(61,58,69,0.04)] shrink-0">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-[#3D3A45]/5 px-4 sm:px-6 py-2 flex justify-around items-center z-40 shadow-[0_-4px_24px_rgba(61,58,69,0.04)] shrink-0">
         <button
           onClick={() => setActiveTab('map')}
           className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'map' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
         >
-          <MapIcon size={20} className={activeTab === 'map' ? 'scale-110 transition-transform' : ''} />
-          <span className="text-[10px] font-semibold">Harita</span>
+          <MapIcon size={18} className={`sm:size-[20px] ${activeTab === 'map' ? 'scale-110 transition-transform' : ''}`} />
+          <span className="text-[9px] sm:text-[10px] font-semibold">Harita</span>
         </button>
 
         <button
           onClick={() => setActiveTab('timeline')}
           className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'timeline' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
         >
-          <Clock size={20} className={activeTab === 'timeline' ? 'scale-110 transition-transform' : ''} />
-          <span className="text-[10px] font-semibold">Timeline</span>
+          <Clock size={18} className={`sm:size-[20px] ${activeTab === 'timeline' ? 'scale-110 transition-transform' : ''}`} />
+          <span className="text-[9px] sm:text-[10px] font-semibold">Timeline</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('gallery')}
+          className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'gallery' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
+        >
+          <Camera size={18} className={`sm:size-[20px] ${activeTab === 'gallery' ? 'scale-110 transition-transform' : ''}`} />
+          <span className="text-[9px] sm:text-[10px] font-semibold">Galeri</span>
         </button>
 
         {/* Ekleme Butonu (Ortada, drawer'i tetikler) */}
         <button
           onClick={() => setIsAddOpen(true)}
-          className="relative -top-5 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-[0_4px_20px_0_rgba(229,152,155,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer z-50"
+          className="relative -top-5 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white shadow-[0_4px_20px_0_rgba(229,152,155,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer z-50 shrink-0"
         >
-          <Plus size={24} />
+          <Plus size={20} className="sm:size-[24px]" />
         </button>
 
         <button
           onClick={() => setActiveTab('wishlist')}
           className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'wishlist' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
         >
-          <Star size={20} className={activeTab === 'wishlist' ? 'scale-110 transition-transform' : ''} />
-          <span className="text-[10px] font-semibold">Wishlist</span>
+          <Star size={18} className={`sm:size-[20px] ${activeTab === 'wishlist' ? 'scale-110 transition-transform' : ''}`} />
+          <span className="text-[9px] sm:text-[10px] font-semibold">Wishlist</span>
         </button>
 
         <button
           onClick={() => setActiveTab('profile')}
           className={`flex flex-col items-center gap-1 cursor-pointer transition-colors ${activeTab === 'profile' ? 'text-[#B56576]' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
         >
-          <User size={20} className={activeTab === 'profile' ? 'scale-110 transition-transform' : ''} />
-          <span className="text-[10px] font-semibold">Profil</span>
+          <User size={18} className={`sm:size-[20px] ${activeTab === 'profile' ? 'scale-110 transition-transform' : ''}`} />
+          <span className="text-[9px] sm:text-[10px] font-semibold">Profil</span>
         </button>
       </nav>
 
