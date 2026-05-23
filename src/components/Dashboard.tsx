@@ -74,7 +74,13 @@ export default function Dashboard({ profile }: { profile: Profile }) {
   const [updatingAvatar, setUpdatingAvatar] = useState(false)
   const [showUnpairConfirm, setShowUnpairConfirm] = useState(false)
   const [unpairing, setUnpairing] = useState(false)
-  const [avatarVersion, setAvatarVersion] = useState<number>(Date.now())
+  const [avatarVersion, setAvatarVersion] = useState<number>(0)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    setAvatarVersion(Date.now())
+  }, [])
 
   // Mekan Verileri State'leri
   const [entries, setEntries] = useState<PlaceEntry[]>([])
@@ -342,7 +348,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
     }
   }
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4 bg-[#FFFDF9] text-[#E5989B]">
         <div className="text-center flex flex-col items-center gap-4">
