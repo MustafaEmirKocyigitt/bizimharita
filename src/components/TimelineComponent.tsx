@@ -673,12 +673,35 @@ export default function TimelineComponent({
 
                           {/* Alt Bilgi Barı */}
                           <div className="flex items-center justify-between text-[10px] text-gray-500 mt-4.5 pt-3 border-t border-[#3D3A45]/8">
-                            <span className="flex items-center gap-1.5 font-semibold text-[#3D3A45]/60">
-                              <div className="w-4 h-4 rounded-full bg-[#FFEBE9] flex items-center justify-center text-[8px] font-extrabold text-[#B56576] border border-white">
-                                {userNames[entry.created_by]?.charAt(0).toUpperCase() || 'S'}
-                              </div>
-                              <span>{userNames[entry.created_by] || 'Sevgilin'} ekledi</span>
-                            </span>
+                            <div className="flex items-center gap-3">
+                              <span className="flex items-center gap-1.5 font-semibold text-[#3D3A45]/60">
+                                <div className="w-4 h-4 rounded-full bg-[#FFEBE9] flex items-center justify-center text-[8px] font-extrabold text-[#B56576] border border-white">
+                                  {userNames[entry.created_by]?.charAt(0).toUpperCase() || 'S'}
+                                </div>
+                                <span>{userNames[entry.created_by] || 'Sevgilin'} ekledi</span>
+                              </span>
+
+                              {/* 🗺️ Konumu Gör Butonu (Lüks Dokunsal & Mikro-animasyonlu) */}
+                              {entry.latitude && entry.longitude && (
+                                <motion.button
+                                  onClick={() => {
+                                    if (onShowOnMap) {
+                                      onShowOnMap(entry.latitude, entry.longitude);
+                                      if (onActiveTabChange) {
+                                        onActiveTabChange('map');
+                                      }
+                                    }
+                                  }}
+                                  whileHover={{ scale: 1.04 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                                  className="flex items-center gap-1 py-1 px-2.5 bg-[#FFF5F5] hover:bg-[#FFEBE9] text-[#B56576] font-bold text-[9px] uppercase tracking-wider rounded-full shadow-clay-button border border-white cursor-pointer transition-colors"
+                                >
+                                  <MapPin size={9} className="text-[#E5989B]" />
+                                  <span>Konumu Gör</span>
+                                </motion.button>
+                              )}
+                            </div>
 
                             {moodInfo && (
                               <span 
