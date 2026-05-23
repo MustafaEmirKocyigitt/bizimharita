@@ -26,7 +26,6 @@ import AddEntryDrawer from '@/components/AddEntryDrawer'
 import PlaceDetailDrawer from '@/components/PlaceDetailDrawer'
 import TimelineComponent from '@/components/TimelineComponent'
 import WishlistComponent from '@/components/WishlistComponent'
-import GalleryComponent from '@/components/GalleryComponent'
 
 interface Profile {
   id: string
@@ -67,7 +66,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
 
   // Durumlar
   const [myProfile, setMyProfile] = useState<Profile>(profile)
-  const [activeTab, setActiveTab] = useState<'map' | 'timeline' | 'add' | 'gallery' | 'wishlist' | 'profile'>('map')
+  const [activeTab, setActiveTab] = useState<'map' | 'timeline' | 'add' | 'wishlist' | 'profile'>('map')
   const [partnerProfile, setPartnerProfile] = useState<Profile | null>(null)
   const [partnerOnline, setPartnerOnline] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -488,12 +487,20 @@ export default function Dashboard({ profile }: { profile: Profile }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 w-full h-full pt-24 pb-24 overflow-y-auto"
+              className="flex-1 w-full h-full"
             >
               <TimelineComponent
                 entries={entries}
                 myId={myProfile.id}
                 partnerName={partnerProfile?.display_name || null}
+                coupleId={myProfile.couple_id || ''}
+                onShowOnMap={(lat, lng) => {
+                  setMapCenter([lat, lng])
+                  setMapZoom(14)
+                }}
+                onActiveTabChange={setActiveTab}
+                onSelectEntry={setSelectedEntry}
+                onOpenDetail={setIsDetailOpen}
               />
             </motion.div>
           )}
@@ -510,27 +517,6 @@ export default function Dashboard({ profile }: { profile: Profile }) {
                 profile={myProfile}
                 partnerName={partnerProfile?.display_name || null}
                 onConvertToEntry={handleConvertWishlistToEntry}
-              />
-            </motion.div>
-          )}
-
-          {activeTab === 'gallery' && (
-            <motion.div
-              key="gallery-tab"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex-1 w-full h-full"
-            >
-              <GalleryComponent
-                coupleId={myProfile.couple_id || ''}
-                onShowOnMap={(lat, lng) => {
-                  setMapCenter([lat, lng])
-                  setMapZoom(14)
-                }}
-                onActiveTabChange={setActiveTab}
-                onSelectEntry={setSelectedEntry}
-                onOpenDetail={setIsDetailOpen}
               />
             </motion.div>
           )}
@@ -668,12 +654,12 @@ export default function Dashboard({ profile }: { profile: Profile }) {
       </main>
 
       {/* Alt Navigasyon Barı (Bottom Navigation) - Yüzen Premium Aşk Adası (Floating Capsule) */}
-      <div className="fixed bottom-5 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[560px] z-40 shrink-0">
-        <nav className="relative bg-white/85 backdrop-blur-2xl border border-white/60 px-2 sm:px-4 py-2.5 flex justify-around items-center rounded-3xl shadow-[0_12px_45px_rgba(61,58,69,0.08)]">
+      <div className="fixed bottom-5 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-40 shrink-0">
+        <nav className="relative bg-white/85 backdrop-blur-2xl border border-white/60 px-3 sm:px-5 py-2.5 flex justify-between items-center rounded-3xl shadow-[0_12px_45px_rgba(61,58,69,0.08)]">
           
           <button
             onClick={() => setActiveTab('map')}
-            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'map' && (
               <motion.div
@@ -690,7 +676,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
 
           <button
             onClick={() => setActiveTab('timeline')}
-            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'timeline' && (
               <motion.div
@@ -701,29 +687,12 @@ export default function Dashboard({ profile }: { profile: Profile }) {
             )}
             <Clock size={18} className={`transition-all duration-300 ${activeTab === 'timeline' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
             <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'timeline' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
-              Timeline
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('gallery')}
-            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
-          >
-            {activeTab === 'gallery' && (
-              <motion.div
-                layoutId="activeTabPill"
-                className="absolute inset-0 bg-[#FFF3F3] border border-pink-100/30 rounded-2xl -z-10"
-                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-              />
-            )}
-            <Camera size={18} className={`transition-all duration-300 ${activeTab === 'gallery' ? 'text-[#B56576] scale-108' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`} />
-            <span className={`text-[9px] sm:text-[10px] tracking-tight transition-all duration-300 ${activeTab === 'gallery' ? 'text-[#B56576] font-extrabold' : 'text-[#3D3A45]/60 hover:text-[#3D3A45] font-semibold'}`}>
-              Galeri
+              Anılar
             </span>
           </button>
 
           {/* Ekleme Butonu (Ortada, halo parıltılı) */}
-          <div className="relative -top-6 shrink-0">
+          <div className="relative -top-6 shrink-0 mx-2">
             <motion.div
               animate={{ scale: [1, 1.08, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -741,7 +710,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
 
           <button
             onClick={() => setActiveTab('wishlist')}
-            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'wishlist' && (
               <motion.div
@@ -758,7 +727,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
 
           <button
             onClick={() => setActiveTab('profile')}
-            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3 rounded-2xl transition-all duration-300 z-10 shrink-0"
+            className="relative flex flex-col items-center gap-1 cursor-pointer py-1.5 px-3.5 rounded-2xl transition-all duration-300 z-10 shrink-0"
           >
             {activeTab === 'profile' && (
               <motion.div

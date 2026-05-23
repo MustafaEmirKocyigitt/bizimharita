@@ -37,7 +37,7 @@ interface GalleryItem {
 interface GalleryComponentProps {
   coupleId: string
   onShowOnMap?: (lat: number, lng: number) => void
-  onActiveTabChange?: (tab: 'map' | 'timeline' | 'add' | 'gallery' | 'wishlist' | 'profile') => void
+  onActiveTabChange?: (tab: 'map' | 'timeline' | 'add' | 'wishlist' | 'profile') => void
   onSelectEntry?: (entry: any) => void
   onOpenDetail?: (isOpen: boolean) => void
 }

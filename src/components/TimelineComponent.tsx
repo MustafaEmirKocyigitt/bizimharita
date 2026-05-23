@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Calendar, Smile, User, Sparkles, MapPin, Search, Maximize2, X, ChevronLeft, ChevronRight, Filter, ArrowUpDown } from 'lucide-react'
+import { Heart, Calendar, Smile, User, Sparkles, MapPin, Search, Maximize2, X, ChevronLeft, ChevronRight, Filter, ArrowUpDown, Compass, Camera } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
+import GalleryComponent from '@/components/GalleryComponent'
 
 interface PlaceEntry {
   id: string
@@ -21,6 +22,11 @@ interface TimelineComponentProps {
   entries: PlaceEntry[]
   myId: string
   partnerName: string | null
+  coupleId: string
+  onShowOnMap?: (lat: number, lng: number) => void
+  onActiveTabChange?: (tab: 'map' | 'timeline' | 'add' | 'wishlist' | 'profile') => void
+  onSelectEntry?: (entry: any) => void
+  onOpenDetail?: (isOpen: boolean) => void
 }
 
 const CATEGORIES: { [key: string]: { label: string; color: string; icon: string } } = {
@@ -137,8 +143,18 @@ function MemoryCardPhotos({ entryId, onPhotoClick }: { entryId: string; onPhotoC
   )
 }
 
-export default function TimelineComponent({ entries, myId, partnerName }: TimelineComponentProps) {
+export default function TimelineComponent({ 
+  entries, 
+  myId, 
+  partnerName, 
+  coupleId, 
+  onShowOnMap, 
+  onActiveTabChange, 
+  onSelectEntry, 
+  onOpenDetail 
+}: TimelineComponentProps) {
   const supabase = createClient()
+  const [viewMode, setViewMode] = useState<'feed' | 'grid'>('feed')
   const [searchTerm, setSearchTerm] = useState('')
   
   // 📆 Filtreleme State'leri
@@ -301,8 +317,66 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
   return (
     <div className="flex-1 w-full max-w-2xl mx-auto px-4 py-6 flex flex-col text-[#3D3A45] relative scrollbar-none">
       
-      {/* 🔍 Arama ve Filtreleme Başlık Alanı (UI/UX Pro Max) */}
-      <div className="space-y-4.5 mb-8 shrink-0">
+      {/* 🌟 Görünüm Seçici Başlık Barı (Zaman Tüneli / Galeri) */}
+      <div className="flex items-center justify-between mb-6 shrink-0 pt-20 sm:pt-24">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-[#3D3A45] tracking-tight">Anılarımız</h2>
+          <p className="text-[9px] text-[#3D3A45]/50 font-bold uppercase tracking-wider pl-0.5">Aşk arşivimiz</p>
+        </div>
+        
+        {/* Seçici Switch (Framer Motion sliding pill) */}
+        <div className="bg-white/80 border border-white/60 p-1 rounded-full flex gap-1 shadow-xs relative">
+          <button
+            onClick={() => setViewMode('feed')}
+            className={`relative px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer shrink-0 z-10 ${viewMode === 'feed' ? 'text-white' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
+          >
+            {viewMode === 'feed' && (
+              <motion.div
+                layoutId="viewModePill"
+                className="absolute inset-0 bg-[#E5989B] rounded-full -z-10"
+                transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+              />
+            )}
+            Zaman Tüneli
+          </button>
+          
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`relative px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer shrink-0 z-10 ${viewMode === 'grid' ? 'text-white' : 'text-[#3D3A45]/60 hover:text-[#3D3A45]'}`}
+          >
+            {viewMode === 'grid' && (
+              <motion.div
+                layoutId="viewModePill"
+                className="absolute inset-0 bg-[#E5989B] rounded-full -z-10"
+                transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+              />
+            )}
+            Fotoğraflar
+          </button>
+        </div>
+      </div>
+
+      {viewMode === 'grid' ? (
+        <motion.div
+          key="gallery-view"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.3 }}
+          className="flex-1 -mx-4"
+        >
+          <GalleryComponent
+            coupleId={coupleId}
+            onShowOnMap={onShowOnMap}
+            onActiveTabChange={onActiveTabChange}
+            onSelectEntry={onSelectEntry}
+            onOpenDetail={onOpenDetail}
+          />
+        </motion.div>
+      ) : (
+        <div className="flex-1 flex flex-col">
+          {/* 🔍 Arama ve Filtreleme Başlık Alanı (UI/UX Pro Max) */}
+          <div className="space-y-4.5 mb-8 shrink-0">
         <div className="flex gap-3">
           {/* Arama Girişi */}
           <div className="relative flex-1">
@@ -629,6 +703,9 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
           </div>
 
         </div>
+      )}
+
+      </div>
       )}
 
       {/* Lightbox Modalı */}
