@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server'
 import CoupleOnboarding from '@/components/CoupleOnboarding'
 import Dashboard from '@/components/Dashboard'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const supabase = await createClient()
 
