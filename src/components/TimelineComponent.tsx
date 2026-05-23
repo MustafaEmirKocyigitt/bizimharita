@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart, Calendar, Smile, User, Sparkles, MapPin, Search, Maximize2, X, ChevronLeft, ChevronRight, Filter, ArrowUpDown } from 'lucide-react'
@@ -35,12 +34,12 @@ const CATEGORIES: { [key: string]: { label: string; color: string; icon: string 
   special: { label: 'Özel Gün', color: '#FFB703', icon: '✨' },
 }
 
-const MOODS: { [key: string]: string } = {
-  romantic: 'Romantik 💖',
-  cozy: 'Huzurlu 🧘',
-  fun: 'Eğlenceli 🎉',
-  adventure: 'Macera 🧗',
-  happy: 'Keyifli 😄',
+const MOODS: { [key: string]: { label: string; color: string; bg: string } } = {
+  romantic: { label: 'Romantik 💖', color: '#B56576', bg: '#FFF5F5' },
+  cozy: { label: 'Huzurlu 🧘', color: '#6B9080', bg: '#F4F9F4' },
+  fun: { label: 'Eğlenceli 🎉', color: '#D97706', bg: '#FFFBF0' },
+  adventure: { label: 'Macera 🧗', color: '#0284C7', bg: '#F0F9FF' },
+  happy: { label: 'Keyifli 😄', color: '#9333EA', bg: '#FAF5FF' },
 }
 
 const MONTHS = [
@@ -58,7 +57,6 @@ const MONTHS = [
   { id: 11, name: 'Aralık' },
 ]
 
-// Anı kartı için iç resim yükleme ve galeri alt bileşeni
 function MemoryCardPhotos({ entryId, onPhotoClick }: { entryId: string; onPhotoClick: (urls: string[], idx: number) => void }) {
   const supabase = createClient()
   const [photos, setPhotos] = useState<string[]>([])
@@ -88,7 +86,7 @@ function MemoryCardPhotos({ entryId, onPhotoClick }: { entryId: string; onPhotoC
   }, [entryId])
 
   if (loading) {
-    return <div className="h-24 bg-gray-50 rounded-2xl animate-pulse" />
+    return <div className="h-32 bg-[#FFFDF9]/65 rounded-3xl animate-pulse border border-pink-100/10" />
   }
 
   if (photos.length === 0) return null
@@ -97,18 +95,18 @@ function MemoryCardPhotos({ entryId, onPhotoClick }: { entryId: string; onPhotoC
     return (
       <div 
         onClick={() => onPhotoClick(photos, 0)}
-        className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/40 cursor-zoom-in group"
+        className="relative w-full aspect-video rounded-[1.8rem] overflow-hidden border border-white shadow-md cursor-zoom-in group transition-transform duration-300 hover:scale-[1.01]"
       >
-        <img src={photos[0]} alt="Anı fotoğrafı" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-[#3D3A45]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-          <Maximize2 size={20} />
+        <img src={photos[0]} alt="Anı fotoğrafı" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-[#3D3A45]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white backdrop-blur-xs">
+          <Maximize2 size={22} className="drop-shadow-md" />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 gap-2.5">
       {photos.slice(0, 3).map((url, idx) => {
         const isThird = idx === 2
         const hasMore = photos.length > 3
@@ -117,19 +115,19 @@ function MemoryCardPhotos({ entryId, onPhotoClick }: { entryId: string; onPhotoC
           <div
             key={idx}
             onClick={() => onPhotoClick(photos, idx)}
-            className={`relative aspect-square rounded-xl overflow-hidden border border-white/40 cursor-zoom-in group ${
+            className={`relative aspect-square rounded-[1.2rem] overflow-hidden border border-white shadow-sm cursor-zoom-in group transition-all duration-300 hover:scale-[1.02] ${
               idx === 0 ? 'col-span-2 row-span-2 aspect-auto h-full' : ''
             }`}
           >
-            <img src={url} alt="Anı fotoğrafı" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <img src={url} alt="Anı fotoğrafı" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             
             {isThird && hasMore ? (
-              <div className="absolute inset-0 bg-[#3D3A45]/60 flex items-center justify-center text-white text-xs font-bold">
-                +{photos.length - 2}
+              <div className="absolute inset-0 bg-[#3D3A45]/60 flex items-center justify-center text-white text-xs font-black backdrop-blur-xs select-none">
+                +{photos.length - 2} Fotoğraf
               </div>
             ) : (
-              <div className="absolute inset-0 bg-[#3D3A45]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                <Maximize2 size={16} />
+              <div className="absolute inset-0 bg-[#3D3A45]/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white backdrop-blur-xs">
+                <Maximize2 size={16} className="drop-shadow-md" />
               </div>
             )}
           </div>
@@ -190,7 +188,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
   // Arama, Yıl, Ay, Manuel Tarih Aralığı ve Sıralama filtrelerini uygula
   const filteredEntries = entries
     .filter((e) => {
-      // 1. Arama Filtresi
       const query = searchTerm.toLowerCase()
       const catLabel = CATEGORIES[e.category.toLowerCase()]?.label.toLowerCase() || ''
       const matchesSearch = 
@@ -200,7 +197,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
 
       if (!matchesSearch) return false
 
-      // 2. Manuel Tarih Aralığı Filtresi (Aktifse yıl/ay filtrelerini ezer)
       const entryTime = new Date(e.visited_at).getTime()
       
       if (startDate) {
@@ -213,13 +209,10 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
         if (entryTime > endTime) return false
       }
 
-      // Sadece manuel tarih aralığı girilmediyse Hızlı Yıl/Ay filtrelerini kontrol et
       if (!startDate && !endDate) {
-        // 3. Yıl Filtresi
         const entryYear = new Date(e.visited_at).getFullYear().toString()
         if (selectedYear !== 'all' && entryYear !== selectedYear) return false
 
-        // 4. Ay Filtresi
         const entryMonth = new Date(e.visited_at).getMonth().toString()
         if (selectedMonth !== 'all' && entryMonth !== selectedMonth) return false
       }
@@ -227,13 +220,11 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
       return true
     })
     .sort((a, b) => {
-      // 5. Sıralama Filtresi
       const dateA = new Date(a.visited_at).getTime()
       const dateB = new Date(b.visited_at).getTime()
       return sortBy === 'newest' ? dateB - dateA : dateA - dateB
     })
 
-  // Hızlı yıl filtresi değiştiğinde manuel aralığı temizle
   const handleYearChange = (val: string) => {
     setSelectedYear(val)
     if (val !== 'all') {
@@ -242,7 +233,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
     }
   }
 
-  // Hızlı ay filtresi değiştiğinde manuel aralığı temizle
   const handleMonthChange = (val: string) => {
     setSelectedMonth(val)
     if (val !== 'all') {
@@ -251,7 +241,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
     }
   }
 
-  // Manuel başlangıç tarihi değiştiğinde hızlı filtreleri temizle
   const handleStartDateChange = (val: string) => {
     setStartDate(val)
     if (val) {
@@ -260,7 +249,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
     }
   }
 
-  // Manuel bitiş tarihi değiştiğinde hızlı filtreleri temizle
   const handleEndDateChange = (val: string) => {
     setEndDate(val)
     if (val) {
@@ -269,7 +257,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
     }
   }
 
-  // Tüm filtreleri temizle
   const handleResetFilters = () => {
     setSelectedYear('all')
     setSelectedMonth('all')
@@ -278,7 +265,6 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
     setSearchTerm('')
   }
 
-  // Anıları ay ve yıla göre grupla
   const groupEntriesByMonth = (items: PlaceEntry[]) => {
     const groups: { [key: string]: PlaceEntry[] } = {}
     items.forEach((item) => {
@@ -313,7 +299,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
   const hasActiveFilters = selectedYear !== 'all' || selectedMonth !== 'all' || startDate !== '' || endDate !== '' || searchTerm !== ''
 
   return (
-    <div className="flex-1 w-full max-w-2xl mx-auto px-4 py-6 flex flex-col text-[#3D3A45] relative">
+    <div className="flex-1 w-full max-w-2xl mx-auto px-4 py-6 flex flex-col text-[#3D3A45] relative scrollbar-none">
       
       {/* 🔍 Arama ve Filtreleme Başlık Alanı (UI/UX Pro Max) */}
       <div className="space-y-4.5 mb-8 shrink-0">
@@ -355,7 +341,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
           </motion.button>
         </div>
 
-        {/* 📆 Gelişmiş Tarih Filtreleme Paneli (UX Pro Max - Glassmorphism) */}
+        {/* 📆 Gelişmiş Tarih Filtreleme Paneli (Responsive Tasarım Yenilendi!) */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
@@ -365,10 +351,10 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
               transition={{ duration: 0.35, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <div className="backdrop-blur-xl bg-white/75 border border-white/80 p-6 rounded-[2rem] space-y-5 shadow-[0_12px_35px_rgba(61,58,69,0.05)]">
+              <div className="backdrop-blur-xl bg-white/75 border border-white/80 p-5 sm:p-6 rounded-[2rem] space-y-5 shadow-[0_12px_35px_rgba(61,58,69,0.05)]">
                 
-                {/* 1. Kısım: Hızlı Seçimler */}
-                <div className="grid grid-cols-3 gap-3">
+                {/* 1. Kısım: Hızlı Seçimler (Responsive Dikey/Yatay Düzenleme) */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   {/* Yıl Seçici */}
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5">
@@ -378,7 +364,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                       <select
                         value={selectedYear}
                         onChange={(e) => handleYearChange(e.target.value)}
-                        className="block w-full px-3.5 py-2.5 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
+                        className="block w-full px-4 py-3 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
                       >
                         <option value="all">Tüm Yıllar</option>
                         {availableYears.map((year) => (
@@ -387,7 +373,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                           </option>
                         ))}
                       </select>
-                      <div className="absolute right-3.5 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
+                      <div className="absolute right-4 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
                     </div>
                   </div>
 
@@ -400,7 +386,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                       <select
                         value={selectedMonth}
                         onChange={(e) => handleMonthChange(e.target.value)}
-                        className="block w-full px-3.5 py-2.5 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
+                        className="block w-full px-4 py-3 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
                       >
                         <option value="all">Tüm Aylar</option>
                         {MONTHS.map((m) => (
@@ -409,7 +395,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                           </option>
                         ))}
                       </select>
-                      <div className="absolute right-3.5 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
+                      <div className="absolute right-4 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
                     </div>
                   </div>
 
@@ -423,19 +409,19 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest')}
-                        className="block w-full px-3.5 py-2.5 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
+                        className="block w-full px-4 py-3 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer appearance-none pr-8"
                       >
                         <option value="newest">En Yeni Önce</option>
                         <option value="oldest">En Eski Önce</option>
                       </select>
-                      <div className="absolute right-3.5 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
+                      <div className="absolute right-4 top-3.5 pointer-events-none text-[#3D3A45]/45 text-[10px]">▼</div>
                     </div>
                   </div>
                 </div>
 
-                {/* 2. Kısım: 📅 Manuel Tarih Aralığı Seçici (UI/UX Pro Max) */}
+                {/* 2. Kısım: 📅 Manuel Tarih Aralığı Seçici (Responsive Dikey/Yatay Düzenleme) */}
                 <div className="pt-4.5 border-t border-[#3D3A45]/8 flex flex-col sm:flex-row gap-3.5 items-stretch">
-                  <div className="flex-1 grid grid-cols-2 gap-3.5">
+                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     {/* Başlangıç Tarihi */}
                     <div className="space-y-1.5">
                       <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5 flex items-center gap-1">
@@ -446,7 +432,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                         type="date"
                         value={startDate}
                         onChange={(e) => handleStartDateChange(e.target.value)}
-                        className="block w-full px-3.5 py-2.5 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer"
+                        className="block w-full px-4 py-3 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer"
                       />
                     </div>
 
@@ -460,7 +446,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                         type="date"
                         value={endDate}
                         onChange={(e) => handleEndDateChange(e.target.value)}
-                        className="block w-full px-3.5 py-2.5 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer"
+                        className="block w-full px-4 py-3 bg-white/95 border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-sm cursor-pointer"
                       />
                     </div>
                   </div>
@@ -473,7 +459,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                         whileTap={{ scale: 0.98 }}
                         type="button"
                         onClick={handleResetFilters}
-                        className="w-full sm:w-auto py-2.5 px-4.5 bg-red-50/75 hover:bg-red-100/90 text-red-500 font-extrabold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-red-100/50 shadow-sm"
+                        className="w-full sm:w-auto py-3 px-5 bg-red-50/75 hover:bg-red-100/90 text-red-500 font-extrabold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-red-100/50 shadow-sm"
                       >
                         <X size={12} />
                         <span>Temizle</span>
@@ -482,10 +468,9 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                   )}
                 </div>
 
-                {/* Manuel aralık aktifse küçük bilgilendirici yazı */}
                 {(startDate || endDate) && (
-                  <p className="text-[9px] text-[#B56576] italic font-semibold pl-1">
-                    * Manuel tarih aralığı filtrelemesi aktif. Hızlı Yıl/Ay seçimleri geçici olarak devre dışı.
+                  <p className="text-[9px] text-[#B56576] italic font-semibold pl-1.5">
+                    * Manuel tarih aralığı filtrelemesi aktif. Hızlı Yıl/Ay seçimleri geçici olarak devre dışı bırakıldı.
                   </p>
                 )}
 
@@ -506,22 +491,28 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
           </p>
         </div>
       ) : filteredEntries.length === 0 ? (
-        <div className="text-center py-10 opacity-70 text-xs">Aradığınız kriterde anı bulunamadı.</div>
+        <div className="text-center py-10 opacity-70 text-xs font-bold bg-white/40 border border-pink-100/20 p-8 rounded-3xl shadow-xs leading-relaxed max-w-md mx-auto">
+          🔍 Seçtiğiniz kriterlere uygun hiçbir anı bulunamadı. <br />
+          <span className="text-[10px] text-[#B56576] font-normal block mt-1.5">Filtreleri sıfırlayarak tüm romantik anılarınızı tekrar görebilirsiniz.</span>
+        </div>
       ) : (
         <div className="relative flex-1">
           
-          {/* Zaman Tüneli Sol Dikey Kesikli Çizgi */}
-          <div className="absolute top-4 bottom-4 left-6 w-[2px] bg-dashed bg-gradient-to-b from-[#E5989B] via-[#B56576] to-[#E5989B]/30 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse at center, #E5989B 30%, transparent 40%)', backgroundSize: '1px 12px', backgroundRepeat: 'repeat-y' }} />
+          {/* Zaman Tüneli Sol Dikey Premium degrade Çizgisi */}
+          <div className="absolute top-4 bottom-4 left-6.5 w-[2px] bg-dashed bg-gradient-to-b from-[#E5989B] via-[#B56576] to-[#E5989B]/15 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse at center, #E5989B 30%, transparent 40%)', backgroundSize: '1px 14px', backgroundRepeat: 'repeat-y' }} />
 
           {/* Ay Grupları */}
           <div className="space-y-10">
             {Object.entries(groupedEntries).map(([monthYear, items]) => (
               <div key={monthYear} className="space-y-6">
                 
-                {/* Ay / Yıl Ara Başlığı */}
-                <div className="relative flex items-center pl-14 shrink-0">
-                  <div className="absolute left-[20px] w-3 h-3 rounded-full bg-[#B56576] ring-4 ring-[#FFFDF9] border border-white" />
-                  <h3 className="font-bold text-sm text-[#B56576] bg-[#FFFDF9] pr-3 select-none uppercase tracking-wider">
+                {/* Ay / Yıl Ara Başlığı (Premium Pill) */}
+                <div className="relative flex items-center pl-14.5 shrink-0">
+                  <motion.div 
+                    whileHover={{ scale: 1.2 }}
+                    className="absolute left-[21px] w-3.5 h-3.5 rounded-full bg-[#B56576] ring-4 ring-[#FFFDF9] border-2 border-white shadow-sm z-20 cursor-pointer" 
+                  />
+                  <h3 className="font-extrabold text-[10px] tracking-widest text-[#B56576] bg-white/80 backdrop-blur-md px-4 py-2 border border-pink-100/40 rounded-full shadow-[0_3px_10px_rgba(61,58,69,0.02)] select-none uppercase">
                     {monthYear}
                   </h3>
                 </div>
@@ -531,54 +522,59 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                   {items.map((entry) => {
                     const catInfo = CATEGORIES[entry.category.toLowerCase()] || { label: entry.category, color: '#B56576', icon: '📍' }
                     const isSpecial = entry.category.toLowerCase() === 'special'
+                    const moodInfo = entry.mood ? MOODS[entry.mood.toLowerCase()] : null
                     
                     return (
                       <motion.div
                         key={entry.id}
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -12 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="relative pl-14"
+                        className="relative pl-14.5 group"
                       >
-                        {/* Kart Sol Küçük Yuvarlak Bağlantı Noktası */}
-                        <div className="absolute left-[22px] top-6 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#E5989B] z-10" />
+                        {/* Kart Sol Küçük Yuvarlak Bağlantı Noktası (Mikromotion parıltı) */}
+                        <motion.div 
+                          whileHover={{ scale: 1.3 }}
+                          className="absolute left-[24px] top-6.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#E5989B] z-10 transition-colors group-hover:border-[#B56576] group-hover:bg-[#FFF5F5]" 
+                        />
 
-                        {/* Anı Kartı Tasarımı */}
+                        {/* Anı Kartı Tasarımı (Pro-Max WOW Detayları) */}
                         <div 
-                          className={`backdrop-blur-md bg-white/75 border rounded-3xl p-5 md:p-6 shadow-[0_4px_20px_rgba(61,58,69,0.02)] transition-all ${
+                          className={`backdrop-blur-md bg-white/80 border rounded-[2rem] p-5 md:p-6 shadow-[0_6px_25px_rgba(61,58,69,0.02)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_10px_35px_rgba(229,152,155,0.07)] hover:border-pink-100/50 ${
                             isSpecial 
-                              ? 'border-[#FFB703] shadow-[0_4px_25px_rgba(255,183,3,0.1)] ring-1 ring-[#FFB703]/20 relative overflow-hidden' 
-                              : 'border-white/50'
+                              ? 'border-[#FFB703] shadow-[0_6px_30px_rgba(255,183,3,0.12)] ring-1 ring-[#FFB703]/25 relative overflow-hidden' 
+                              : 'border-white/70'
                           }`}
                         >
                           {isSpecial && (
-                            <div className="absolute -top-10 -left-10 w-24 h-24 bg-[#FFB703]/10 rounded-full blur-2xl pointer-events-none" />
+                            <div className="absolute -top-12 -left-12 w-28 h-28 bg-gradient-to-tr from-[#FFB703]/10 to-transparent rounded-full blur-2xl pointer-events-none animate-pulse" />
                           )}
 
                           {/* Kart Başlık Alanı */}
-                          <div className="flex justify-between items-start gap-4 mb-3">
+                          <div className="flex justify-between items-start gap-4 mb-3.5">
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="text-lg">{catInfo.icon}</span>
-                                <h4 className="font-bold text-base md:text-lg tracking-tight">
+                                <span className="text-xl select-none">{catInfo.icon}</span>
+                                <h4 className="font-extrabold text-sm md:text-base tracking-tight text-[#3D3A45]">
                                   {entry.title}
                                 </h4>
                               </div>
                               
-                              <p className="text-[10px] text-gray-500 flex items-center gap-1 mt-1">
+                              <p className="text-[10px] text-[#3D3A45]/50 flex items-center gap-1.5 mt-1 font-semibold">
                                 <MapPin size={10} className="text-[#E5989B]" />
                                 <span>{catInfo.label}</span>
                                 <span className="opacity-40">•</span>
-                                <span>{new Date(entry.visited_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                                <span>{new Date(entry.visited_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                               </p>
                             </div>
 
-                            {/* Kalp Rating */}
+                            {/* Kalp Derecelendirmesi (Göz Alıcı İkili Pembe Ton) */}
                             <div className="flex gap-0.5 shrink-0 text-[#E5989B]">
                               {[...Array(5)].map((_, idx) => (
                                 <Heart
                                   key={idx}
-                                  size={14}
+                                  size={13}
                                   fill={idx < entry.rating ? '#E5989B' : 'transparent'}
+                                  className={idx < entry.rating ? 'drop-shadow-sm scale-110' : 'opacity-35'}
                                 />
                               ))}
                             </div>
@@ -592,23 +588,32 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                             />
                           </div>
 
-                          {/* Anı Notu Açıklaması */}
+                          {/* Anı Notu Açıklaması (Polaroid Kart/Mektup benzeri zemin) */}
                           {entry.description && (
-                            <p className="text-xs md:text-sm leading-relaxed text-[#3D3A45]/90 whitespace-pre-line bg-[#FFFDF9]/60 border border-[#3D3A45]/5 p-3.5 rounded-2xl">
+                            <p className="text-xs md:text-[13px] leading-relaxed text-[#3D3A45]/90 whitespace-pre-line bg-[#FFFDF9]/80 border border-[#FFEBE9]/50 p-4 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.01)] font-medium">
                               {entry.description}
                             </p>
                           )}
 
                           {/* Alt Bilgi Barı */}
-                          <div className="flex items-center justify-between text-[10px] text-gray-500 mt-4 pt-3 border-t border-[#3D3A45]/5">
-                            <span className="flex items-center gap-1">
-                              <User size={10} className="text-[#E5989B]" />
+                          <div className="flex items-center justify-between text-[10px] text-gray-500 mt-4.5 pt-3 border-t border-[#3D3A45]/8">
+                            <span className="flex items-center gap-1.5 font-semibold text-[#3D3A45]/60">
+                              <div className="w-4 h-4 rounded-full bg-[#FFEBE9] flex items-center justify-center text-[8px] font-extrabold text-[#B56576] border border-white">
+                                {userNames[entry.created_by]?.charAt(0).toUpperCase() || 'S'}
+                              </div>
                               <span>{userNames[entry.created_by] || 'Sevgilin'} ekledi</span>
                             </span>
 
-                            {entry.mood && (
-                              <span className="px-2 py-0.5 rounded-md bg-[#FFF5F5] text-[#B56576] font-semibold border border-[#FFEBE9]">
-                                {MOODS[entry.mood.toLowerCase()] || entry.mood}
+                            {moodInfo && (
+                              <span 
+                                className="px-2.5 py-1.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border transition-colors shadow-2xs"
+                                style={{
+                                  backgroundColor: moodInfo.bg,
+                                  borderColor: moodInfo.color + '25',
+                                  color: moodInfo.color
+                                }}
+                              >
+                                {moodInfo.label}
                               </span>
                             )}
                           </div>
@@ -638,7 +643,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
           >
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-colors z-100"
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-all z-100"
             >
               <X size={20} />
             </button>
@@ -648,7 +653,7 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                 key={lightboxActiveIdx}
                 src={lightboxImages[lightboxActiveIdx]}
                 alt="Tam Ekran Anı"
-                className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/10"
+                className="max-w-full max-h-full object-contain rounded-[2rem] shadow-2xl border border-white/10"
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
@@ -659,18 +664,18 @@ export default function TimelineComponent({ entries, myId, partnerName }: Timeli
                 <>
                   <button
                     onClick={handlePrevLightbox}
-                    className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-colors"
+                    className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-all"
                   >
                     <ChevronLeft size={24} />
                   </button>
                   <button
                     onClick={handleNextLightbox}
-                    className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-colors"
+                    className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white cursor-pointer transition-all"
                   >
                     <ChevronRight size={24} />
                   </button>
 
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-white/70 text-xs font-semibold select-none">
+                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-white/70 text-xs font-bold select-none">
                     {lightboxActiveIdx + 1} / {lightboxImages.length}
                   </div>
                 </>
