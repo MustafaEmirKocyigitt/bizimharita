@@ -213,8 +213,8 @@ export default function Dashboard({ profile }: { profile: Profile }) {
         (payload: any) => {
           const updatedProfile = payload.new as Profile
           // Eğer couple_id veya partner_id null olduysa (yani eşleşme iptal edildiyse!)
-          if (!updatedProfile.couple_id) {
-            router.refresh() // Onboarding ekranına geri fırlat!
+          if (!updatedProfile || !updatedProfile.couple_id) {
+            window.location.href = '/' // Sayfayı sıfırdan yükle ve onboarding'e at!
           }
         }
       )
@@ -326,30 +326,13 @@ export default function Dashboard({ profile }: { profile: Profile }) {
     setUnpairing(true)
 
     try {
-      // 1. Kendi profilimizdeki couple_id ve partner_id'leri temizle
-      const { error: myError } = await supabase
-        .from('profiles')
-        .update({ couple_id: null, partner_id: null })
-        .eq('id', myProfile.id)
+      // Supabase RPC fonksiyonu ile güvenli ve atomik eşleşme iptali
+      const { error } = await supabase.rpc('unpair_couple')
 
-      if (myError) throw myError
+      if (error) throw error
 
-      // 2. Eşimizin profilindeki couple_id ve partner_id'leri temizle (Varsa)
-      if (myProfile.partner_id) {
-        await supabase
-          .from('profiles')
-          .update({ couple_id: null, partner_id: null })
-          .eq('id', myProfile.partner_id)
-      }
-
-      // 3. Couples tablosundaki ilişkili satırı sil
-      await supabase
-        .from('couples')
-        .delete()
-        .eq('id', myProfile.couple_id)
-
-      // Başarılı! Sayfayı yenileyerek Onboarding ekranına dön
-      router.refresh()
+      // Başarılı! Sayfayı tazeleyerek onboarding'e yönlenmesini sağla
+      window.location.href = '/'
     } catch (err) {
       console.error('Eşleşme sonlandırılırken hata:', err)
     } finally {
