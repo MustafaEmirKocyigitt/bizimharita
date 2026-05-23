@@ -267,14 +267,14 @@ export default function CoupleOnboarding({ initialProfile }: { initialProfile: P
   }
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center p-4 bg-gradient-to-tr from-[#FFFDF9] via-[#FFEBE9] to-[#FFF5F5] overflow-hidden">
+    <main className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-tr from-[#FFFDF9] via-[#FFEBE9] to-[#FFF5F5] overflow-x-hidden py-16 sm:py-8">
       
       {/* Cikis Yap Butonu */}
       <button
         onClick={handleSignOut}
-        className="absolute top-6 right-6 flex items-center gap-2 py-2.5 px-4 bg-white/60 hover:bg-white/90 border border-[#3D3A45]/5 hover:border-[#3D3A45]/15 text-sm font-semibold rounded-2xl transition-all cursor-pointer text-[#3D3A45]/70 hover:text-[#3D3A45]"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-1.5 py-2 px-3 sm:py-2.5 sm:px-4 bg-white/70 backdrop-blur-md hover:bg-white/90 border border-[#3D3A45]/10 hover:border-[#3D3A45]/20 text-xs sm:text-sm font-semibold rounded-xl sm:rounded-2xl transition-all cursor-pointer text-[#3D3A45]/70 hover:text-[#3D3A45] shadow-sm"
       >
-        <LogOut size={16} />
+        <LogOut size={14} className="sm:size-4" />
         <span>Çıkış Yap</span>
       </button>
 
