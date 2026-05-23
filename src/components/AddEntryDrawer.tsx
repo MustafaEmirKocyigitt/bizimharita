@@ -261,7 +261,7 @@ export default function AddEntryDrawer({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 26, stiffness: 210 }}
-            className="fixed bottom-0 left-0 right-0 max-w-2xl mx-auto bg-[#FFFDF9]/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-white/80 shadow-[0_-12px_40px_rgba(61,58,69,0.1)] p-6 z-50 max-h-[94vh] overflow-y-auto flex flex-col text-[#3D3A45] scrollbar-none"
+            className="fixed bottom-0 left-0 right-0 max-w-2xl mx-auto bg-[#FFFDF9]/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-white/80 shadow-[0_-12px_40px_rgba(61,58,69,0.1)] p-6 z-50 max-h-[94vh] overflow-y-auto overflow-x-hidden flex flex-col text-[#3D3A45] scrollbar-none"
           >
             {/* Ust Tutacak / Çizgi */}
             <div className="mx-auto w-12 h-1.5 rounded-full bg-gray-300/60 mb-5 shrink-0 cursor-grab active:cursor-grabbing" onClick={onClose} />
@@ -455,7 +455,7 @@ export default function AddEntryDrawer({
                     <Smile size={10} className="text-[#E5989B]" />
                     Nasıl Hissettiniz?
                   </label>
-                  <div className="grid grid-cols-5 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                     {MOODS.map((m) => {
                       const isSelected = mood === m.id
                       
@@ -487,7 +487,7 @@ export default function AddEntryDrawer({
                 <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1 flex items-center gap-1">
                   Aşk Puanınız (Derece)
                 </label>
-                <div className="flex gap-2 py-1 items-center">
+                <div className="flex flex-wrap gap-2.5 py-1 items-center">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <motion.button
                       key={star}
@@ -531,7 +531,7 @@ export default function AddEntryDrawer({
                 </label>
                 
                 {/* Sürükle bırak / Secici Kart */}
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                   {/* Foto Ekleme Butonu */}
                   <label className="aspect-square border-2 border-dashed border-[#E5989B]/30 bg-[#FFF5F5]/10 hover:bg-[#FFF5F5]/30 rounded-2xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all duration-300 text-[#B56576] hover:scale-102 active:scale-97">
                     <Camera size={22} className="animate-pulse" />
