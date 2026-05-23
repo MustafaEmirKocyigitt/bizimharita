@@ -487,7 +487,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 w-full h-full"
+              className="flex-1 w-full h-full overflow-y-auto"
             >
               <TimelineComponent
                 entries={entries}
