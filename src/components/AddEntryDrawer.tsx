@@ -1,8 +1,7 @@
 'use client'
-
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Search, Calendar, Smile, X, Upload, Check, AlertCircle, MapPin, Camera } from 'lucide-react'
+import { Heart, Search, Calendar, Smile, X, Upload, Check, AlertCircle, MapPin, Camera, Coffee, Utensils, Trees, Compass, Bed, Ticket, Landmark, Sparkles } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { compressImage } from '@/utils/imageCompressor'
 
@@ -25,22 +24,22 @@ interface AddEntryDrawerProps {
 }
 
 const CATEGORIES = [
-  { id: 'cafe', label: 'Kafe', color: '#E5989B' },
-  { id: 'restaurant', label: 'Restoran', color: '#B56576' },
-  { id: 'nature', label: 'Doğa', color: '#6B9080' },
-  { id: 'travel', label: 'Seyahat', color: '#8ECAE6' },
-  { id: 'hotel', label: 'Otel', color: '#A24857' },
-  { id: 'event', label: 'Etkinlik', color: '#E07A5F' },
-  { id: 'museum', label: 'Müze', color: '#9B5DE5' },
-  { id: 'special', label: 'Özel Gün', color: '#FFB703' },
+  { id: 'cafe', label: 'Kafe', color: '#E5989B', icon: Coffee },
+  { id: 'restaurant', label: 'Restoran', color: '#B56576', icon: Utensils },
+  { id: 'nature', label: 'Doğa', color: '#6B9080', icon: Trees },
+  { id: 'travel', label: 'Seyahat', color: '#8ECAE6', icon: Compass },
+  { id: 'hotel', label: 'Otel', color: '#A24857', icon: Bed },
+  { id: 'event', label: 'Etkinlik', color: '#E07A5F', icon: Ticket },
+  { id: 'museum', label: 'Müze', color: '#9B5DE5', icon: Landmark },
+  { id: 'special', label: 'Özel Gün', color: '#FFB703', icon: Sparkles },
 ]
 
 const MOODS = [
-  { id: 'romantic', label: 'Romantik 💖' },
-  { id: 'cozy', label: 'Huzurlu 🧘' },
-  { id: 'fun', label: 'Eğlenceli 🎉' },
-  { id: 'adventure', label: 'Macera 🧗' },
-  { id: 'happy', label: 'Keyifli 😄' },
+  { id: 'romantic', label: 'Romantik', emoji: '💖', bg: '#FFF5F5', border: '#FFEBE9', text: '#B56576' },
+  { id: 'cozy', label: 'Huzurlu', emoji: '🧘', bg: '#F4F9F4', border: '#E8F5E9', text: '#6B9080' },
+  { id: 'fun', label: 'Eğlenceli', emoji: '🎉', bg: '#FFFBF0', border: '#FEF3C7', text: '#D97706' },
+  { id: 'adventure', label: 'Macera', emoji: '🧗', bg: '#F0F9FF', border: '#E0F2FE', text: '#0284C7' },
+  { id: 'happy', label: 'Keyifli', emoji: '😄', bg: '#FAF5FF', border: '#F3E8FF', text: '#9333EA' },
 ]
 
 export default function AddEntryDrawer({
@@ -105,7 +104,6 @@ export default function AddEntryDrawer({
     setSearching(true)
     setShowDropdown(true)
 
-    // Debounced search to avoid Nominatim rate limiting (1 request per second is polite)
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const response = await fetch(
@@ -127,7 +125,6 @@ export default function AddEntryDrawer({
   }
 
   const handleSelectLocation = (loc: any) => {
-    // Sadece mekan ismini veya kisa adini almak icin:
     const shortName = loc.display_name.split(',')[0]
     setTitle(shortName)
     setSearchQuery(shortName)
@@ -196,7 +193,6 @@ export default function AddEntryDrawer({
         setUploading(true)
         
         for (const file of selectedFiles) {
-          // Resmi canvas ile WebP yapip sıkıstır
           const compressedBlob = await compressImage(file, 1200, 0.8)
           const fileName = `${profile.couple_id}/${entryData.id}/${crypto.randomUUID()}.webp`
 
@@ -212,7 +208,6 @@ export default function AddEntryDrawer({
             continue
           }
 
-          // Resim path'ini entry_photos tablosuna ekle
           await supabase.from('entry_photos').insert({
             entry_id: entryData.id,
             storage_path: uploadData.path,
@@ -220,7 +215,7 @@ export default function AddEntryDrawer({
         }
       }
 
-      // Formu temizle ve basari callback'ini tetikle
+      // Formu temizle
       setTitle('')
       setDescription('')
       setCategory('cafe')
@@ -240,7 +235,6 @@ export default function AddEntryDrawer({
     }
   }
 
-  // Haritadan secilen konumu sifirla ve normal aramaya don
   const handleResetCoords = () => {
     setLatitude(null)
     setLongitude(null)
@@ -258,50 +252,56 @@ export default function AddEntryDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#3D3A45]/30 backdrop-blur-xs z-50"
+            className="fixed inset-0 bg-[#3D3A45]/35 backdrop-blur-xs z-50"
           />
 
-          {/* Drawer Panel */}
+          {/* Drawer Panel (Pro-Max Design) */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed bottom-0 left-0 right-0 max-w-2xl mx-auto bg-[#FFFDF9] rounded-t-3xl border-t border-white/50 shadow-[0_-8px_32px_rgba(61,58,69,0.12)] p-6 z-50 max-h-[92vh] overflow-y-auto flex flex-col text-[#3D3A45]"
+            transition={{ type: 'spring', damping: 26, stiffness: 210 }}
+            className="fixed bottom-0 left-0 right-0 max-w-2xl mx-auto bg-[#FFFDF9]/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-white/80 shadow-[0_-12px_40px_rgba(61,58,69,0.1)] p-6 z-50 max-h-[94vh] overflow-y-auto flex flex-col text-[#3D3A45] scrollbar-none"
           >
             {/* Ust Tutacak / Çizgi */}
-            <div className="mx-auto w-12 h-1.5 rounded-full bg-gray-300/60 mb-5 shrink-0" onClick={onClose} />
+            <div className="mx-auto w-12 h-1.5 rounded-full bg-gray-300/60 mb-5 shrink-0 cursor-grab active:cursor-grabbing" onClick={onClose} />
 
             {/* Header */}
             <div className="flex justify-between items-center mb-6 shrink-0">
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                Yeni Bir Anı Ekle <Heart size={20} fill="#E5989B" className="text-[#E5989B] animate-pulse" />
+              <h2 className="text-xl font-bold flex items-center gap-2.5 font-outfit">
+                Yeni Bir Anı Ekle 
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                  className="p-1 bg-[#FFF5F5] rounded-full text-[#E5989B]"
+                >
+                  <Heart size={16} fill="#E5989B" />
+                </motion.div>
               </h2>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100/80 transition-colors cursor-pointer text-gray-500"
+                className="p-2 rounded-full hover:bg-red-50 text-[#B56576] hover:text-red-500 transition-all cursor-pointer active:scale-90"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
             {error && (
-              <div className="flex items-center gap-3 p-4 mb-5 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-xs shrink-0">
+              <div className="flex items-center gap-3 p-4 mb-5 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-xs shrink-0 shadow-sm animate-pulse">
                 <AlertCircle size={16} />
                 <span>{error}</span>
               </div>
             )}
 
             {/* Form Gövdesi */}
-            <form onSubmit={handleSubmit} className="space-y-5 flex-1 pb-4">
+            <form onSubmit={handleSubmit} className="space-y-6 flex-1 pb-6">
               
               {/* Konum Arama veya Özel Konum Ekleme */}
               <div className="space-y-2">
                 {latitude !== null && longitude !== null ? (
-                  /* Haritadan veya Onboarding/Wishlist'ten konum secilmisse */
                   <div className="space-y-2">
                     <div className="flex justify-between items-center pl-1">
-                      <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60">
+                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60">
                         Mekan / Konum Adı *
                       </label>
                       <button
@@ -320,27 +320,27 @@ export default function AddEntryDrawer({
                         setTitle(e.target.value)
                         setSearchQuery(e.target.value)
                       }}
-                      placeholder="Mekana özel bir isim verin (Örn: Bizim Bankımız, İlk Kahve İçtiğimiz Yer)..."
-                      className="block w-full px-4 py-3 bg-white border border-[#E5989B]/30 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                      placeholder="Mekana özel bir isim verin..."
+                      className="block w-full px-4.5 py-3 bg-white border border-[#E5989B]/40 rounded-2xl text-xs font-semibold placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.01)]"
                     />
                     
-                    <div className="p-3.5 bg-emerald-50/50 border border-emerald-100/60 rounded-2xl text-[11px] text-emerald-800 leading-relaxed flex items-start gap-2">
+                    <div className="p-4 bg-emerald-50/60 border border-emerald-100/50 rounded-2xl text-[11px] text-emerald-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
                       <span className="text-sm">📍</span>
                       <div>
-                        <span className="font-bold">Özel Nokta Haritadan Seçildi!</span> Koordinatlar: <span className="font-mono bg-emerald-100/50 px-1 rounded">{latitude.toFixed(5)}, {longitude.toFixed(5)}</span>. 
-                        Arama motorunda çıkmayan gizli sığınaklarınızı veya özel yerlerinizi bu sayede özgürce kaydedebilirsiniz. ❤️
+                        <span className="font-bold">Gizli Nokta Haritadan Seçildi!</span> Koordinatlar: <span className="font-mono bg-emerald-100/50 px-1.5 py-0.5 rounded text-[10px]">{latitude.toFixed(5)}, {longitude.toFixed(5)}</span>. 
+                        Aramalarda çıkmayan gizli banklarınızı, orman sığınaklarınızı veya ilk sarıldığınız yeri özgürce kaydedebilirsiniz! ❤️
                       </div>
                     </div>
                   </div>
                 ) : (
                   /* Normal Konum Arama Modu */
-                  <div className="relative space-y-1">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                  <div className="relative space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
                       Mekan / Konum Arama *
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#3D3A45]/40">
-                        <Search size={18} />
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#E5989B]">
+                        <Search size={16} className="animate-pulse" />
                       </div>
                       <input
                         type="text"
@@ -348,10 +348,10 @@ export default function AddEntryDrawer({
                         value={searchQuery}
                         onChange={(e) => handleSearchChange(e.target.value)}
                         placeholder="Mekan, sokak veya şehir adı aratın..."
-                        className="block w-full pl-11 pr-4 py-3 bg-white border border-white/60 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
+                        className="block w-full pl-11 pr-11 py-3.5 bg-white border border-pink-100/45 rounded-full text-xs font-semibold text-[#3D3A45] placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-transparent transition-all shadow-[0_4px_15px_rgba(61,58,69,0.01)] focus:shadow-[0_0_18px_rgba(229,152,155,0.2)]"
                       />
                       {searching && (
-                        <div className="absolute right-4 top-3.5 w-4 h-4 border-2 border-[#E5989B] border-t-transparent rounded-full animate-spin" />
+                        <div className="absolute right-4 top-3.5 w-4.5 h-4.5 border-2 border-[#E5989B] border-t-transparent rounded-full animate-spin" />
                       )}
                     </div>
 
@@ -359,24 +359,26 @@ export default function AddEntryDrawer({
                     <AnimatePresence>
                       {showDropdown && searchResults.length > 0 && (
                         <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-white border border-gray-100 rounded-2xl shadow-lg z-50 p-2 space-y-1"
+                          initial={{ opacity: 0, y: -12, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                          className="absolute left-0 right-0 mt-2 max-h-52 overflow-y-auto bg-white/95 backdrop-blur-xl border border-white/60 rounded-3xl shadow-[0_12px_45px_rgba(61,58,69,0.12)] z-50 p-2.5 space-y-1.5"
                         >
                           {searchResults.map((result, idx) => (
                             <button
                               key={idx}
                               type="button"
                               onClick={() => handleSelectLocation(result)}
-                              className="w-full text-left p-3 hover:bg-[#FFF5F5] rounded-xl text-xs flex items-start gap-2.5 transition-colors cursor-pointer"
+                              className="w-full text-left p-3 hover:bg-[#FFF5F5] rounded-2xl text-[11px] flex items-start gap-2.5 transition-all cursor-pointer hover:translate-x-0.5"
                             >
-                              <MapPin size={14} className="text-[#E5989B] mt-0.5 shrink-0" />
+                              <div className="mt-0.5 p-1 bg-[#FFF5F5] text-[#E5989B] rounded-lg shrink-0">
+                                <MapPin size={13} />
+                              </div>
                               <div>
-                                <span className="font-semibold text-[#3D3A45]">
+                                <span className="font-bold text-[#3D3A45] text-xs">
                                   {result.display_name.split(',')[0]}
                                 </span>
-                                <p className="text-[10px] text-gray-500 truncate mt-0.5">
+                                <p className="text-[9px] text-[#3D3A45]/60 truncate mt-0.5">
                                   {result.display_name}
                                 </p>
                               </div>
@@ -386,88 +388,103 @@ export default function AddEntryDrawer({
                       )}
                     </AnimatePresence>
                     
-                    <div className="p-3.5 bg-[#FFF5F5]/40 border border-[#FFEBE9]/50 rounded-2xl text-[11px] text-[#B56576] leading-relaxed flex items-start gap-2">
+                    <div className="p-3.5 bg-[#FFF5F5]/60 border border-[#FFEBE9]/50 rounded-2xl text-[11px] text-[#B56576] leading-relaxed flex items-start gap-2 shadow-xs">
                       <span className="text-sm">💡</span>
                       <div>
-                        <span className="font-bold">Aradığınız yeri bulamadınız mı?</span> Türkiye'deki yerel işletmeler arama listesinde görünmüyorsa; harita üzerinde anınızın geçtiği noktaya **tıklayarak** da konumu kolayca seçebilir ve dilediğiniz özel ismi verebilirsiniz!
+                        <span className="font-bold">Arama listesinde çıkmıyor mu?</span> Hiç dert etmeyin! Harita üzerinde anınızın geçtiği noktaya **uzun dokunarak / tıklayarak** da koordinatları seçebilir ve oraya dilediğiniz özel romantik ismi verebilirsiniz! ❤️
                       </div>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Kategori Seçici */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+              {/* Kategori Seçici (Pro-Max SVG Icons & Smooth Select) */}
+              <div className="space-y-2.5">
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5">
                   Kategori Seçin
                 </label>
-                <div className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-none">
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setCategory(cat.id)}
-                      className={`px-4 py-2 rounded-2xl text-xs font-semibold shrink-0 cursor-pointer border transition-all ${
-                        category === cat.id
-                          ? 'border-[#B56576] text-white shadow-sm'
-                          : 'border-white/50 bg-white hover:bg-gray-50 text-[#3D3A45]/70'
-                      }`}
-                      style={{
-                        backgroundColor: category === cat.id ? cat.color : undefined,
-                      }}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+                <div className="flex gap-2.5 overflow-x-auto pb-3 -mx-2 px-2 scrollbar-none">
+                  {CATEGORIES.map((cat) => {
+                    const Icon = cat.icon
+                    const isSelected = category === cat.id
+                    
+                    return (
+                      <motion.button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setCategory(cat.id)}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        className={`px-4.5 py-3 rounded-full text-xs font-bold shrink-0 cursor-pointer border transition-all duration-300 flex items-center gap-1.5 shadow-[0_3px_12px_rgba(61,58,69,0.01)] ${
+                          isSelected
+                            ? 'border-transparent text-white shadow-[0_4px_18px_rgba(181,101,118,0.25)]'
+                            : 'border-pink-100/40 bg-white hover:bg-gray-50 text-[#3D3A45]/85'
+                        }`}
+                        style={{
+                          backgroundColor: isSelected ? cat.color : undefined,
+                        }}
+                      >
+                        <Icon size={13} className={isSelected ? 'text-white' : 'opacity-70 text-[#3D3A45]'} />
+                        <span className={isSelected ? 'text-white' : 'text-[#3D3A45]/85'}>{cat.label}</span>
+                      </motion.button>
+                    )
+                  })}
                 </div>
               </div>
 
-              {/* Tarih ve Duygu Seçici */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+              {/* Tarih ve Duygu Seçici (Duygular Emoji Kart Yapıldı!) */}
+              <div className="space-y-4">
+                {/* Ziyaret Tarihi */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5 flex items-center gap-1">
+                    <Calendar size={10} className="text-[#E5989B]" />
                     Ziyaret Tarihi
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#3D3A45]/40">
-                      <Calendar size={16} />
-                    </div>
-                    <input
-                      type="date"
-                      required
-                      value={visitedAt}
-                      onChange={(e) => setVisitedAt(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-white border border-white/60 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all"
-                    />
-                  </div>
+                  <input
+                    type="date"
+                    required
+                    value={visitedAt}
+                    onChange={(e) => setVisitedAt(e.target.value)}
+                    className="block w-full px-4 py-3 bg-white border border-pink-100/50 rounded-2xl text-xs font-semibold text-[#3D3A45] focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B]/85 transition-all shadow-[0_4px_12px_rgba(61,58,69,0.01)] cursor-pointer"
+                  />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+                {/* Nasıl Hissettiniz? (Premium Emoji Cards) */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5 flex items-center gap-1">
+                    <Smile size={10} className="text-[#E5989B]" />
                     Nasıl Hissettiniz?
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#3D3A45]/40">
-                      <Smile size={16} />
-                    </div>
-                    <select
-                      value={mood}
-                      onChange={(e) => setMood(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-white border border-white/60 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all appearance-none"
-                    >
-                      {MOODS.map((m) => (
-                        <option key={m.id} value={m.id}>
-                          {m.label}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="grid grid-cols-5 gap-2">
+                    {MOODS.map((m) => {
+                      const isSelected = mood === m.id
+                      
+                      return (
+                        <motion.button
+                          key={m.id}
+                          type="button"
+                          onClick={() => setMood(m.id)}
+                          whileHover={{ scale: 1.05, y: -1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="py-3.5 px-1 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-1.5 shadow-sm"
+                          style={{
+                            backgroundColor: isSelected ? m.bg : 'white',
+                            borderColor: isSelected ? m.border : '#FFF0F0',
+                            color: m.text
+                          }}
+                        >
+                          <span className="text-xl md:text-2xl">{m.emoji}</span>
+                          <span className="text-[8px] font-extrabold uppercase tracking-wider opacity-85">{m.label}</span>
+                        </motion.button>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
 
               {/* Kalp Rating (1-5 Puan) */}
-              <div className="space-y-1">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+              <div className="space-y-1.5 bg-white/40 border border-pink-100/25 p-4 rounded-3xl">
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1 flex items-center gap-1">
                   Aşk Puanınız (Derece)
                 </label>
                 <div className="flex gap-2 py-1 items-center">
@@ -476,49 +493,49 @@ export default function AddEntryDrawer({
                       key={star}
                       type="button"
                       onClick={() => setRating(star)}
-                      whileHover={{ scale: 1.2 }}
+                      whileHover={{ scale: 1.25 }}
                       whileTap={{ scale: 0.9 }}
                       className="text-[#E5989B] cursor-pointer"
                     >
                       <Heart
-                        size={28}
+                        size={30}
                         fill={star <= rating ? '#E5989B' : 'transparent'}
-                        strokeWidth={2}
+                        strokeWidth={2.2}
                       />
                     </motion.button>
                   ))}
-                  <span className="text-xs font-bold text-[#B56576] pl-2">
-                    {rating === 5 ? 'Kusursuz! ❤️' : `${rating}/5`}
+                  <span className="text-xs font-black text-[#B56576] pl-2 select-none">
+                    {rating === 5 ? 'Aşk Dolu! 💖' : rating === 4 ? 'Çok Keyifli! 🥰' : rating === 3 ? 'Harika! 😊' : rating === 2 ? 'Güzeldi ✨' : 'Ortalama 💫'}
                   </span>
                 </div>
               </div>
 
               {/* Anı Notu */}
-              <div className="space-y-1">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5">
                   Anı Notu & Deneyimleriniz
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Birlikte neler yaptınız? Mekan hakkında partnerinle unutmak istemediğin ufak detaylar..."
-                  rows={3}
-                  className="block w-full px-4 py-3 bg-white border border-white/60 rounded-2xl text-sm placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all resize-none"
+                  placeholder="Birlikte neler yaptınız? Ortak günlüğünüze unutmak istemediğiniz tüm romantik ve tatlı detayları karalayın..."
+                  rows={4}
+                  className="block w-full px-4.5 py-3.5 bg-white border border-pink-100/40 rounded-3xl text-xs font-semibold placeholder-[#3D3A45]/40 focus:outline-none focus:ring-2 focus:ring-[#E5989B]/30 focus:border-[#E5989B] transition-all resize-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.01)]"
                 />
               </div>
 
               {/* Çoklu Görsel Yükleme */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#3D3A45]/60 pl-1">
+              <div className="space-y-2.5">
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#3D3A45]/60 pl-1.5">
                   Fotoğraflar Ekleyin
                 </label>
                 
                 {/* Sürükle bırak / Secici Kart */}
                 <div className="grid grid-cols-4 gap-3">
                   {/* Foto Ekleme Butonu */}
-                  <label className="aspect-square border border-dashed border-[#E5989B]/40 hover:border-[#E5989B] bg-white rounded-2xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors text-[#B56576] hover:bg-[#FFF5F5]/30">
-                    <Camera size={20} />
-                    <span className="text-[9px] font-bold uppercase tracking-wider">Ekle</span>
+                  <label className="aspect-square border-2 border-dashed border-[#E5989B]/30 bg-[#FFF5F5]/10 hover:bg-[#FFF5F5]/30 rounded-2xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all duration-300 text-[#B56576] hover:scale-102 active:scale-97">
+                    <Camera size={22} className="animate-pulse" />
+                    <span className="text-[8px] font-extrabold uppercase tracking-wider">Ekle</span>
                     <input
                       type="file"
                       multiple
@@ -532,7 +549,7 @@ export default function AddEntryDrawer({
                   {selectedFiles.map((file, idx) => (
                     <div
                       key={idx}
-                      className="group relative aspect-square rounded-2xl border border-white/40 bg-gray-50 overflow-hidden"
+                      className="group relative aspect-square rounded-2xl border border-[#FFF0F0] bg-gray-50 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                     >
                       <img
                         src={URL.createObjectURL(file)}
@@ -542,7 +559,7 @@ export default function AddEntryDrawer({
                       <button
                         type="button"
                         onClick={() => handleRemoveFile(idx)}
-                        className="absolute top-1 right-1 p-1 bg-[#3D3A45]/70 hover:bg-[#3D3A45] rounded-full text-white cursor-pointer transition-colors"
+                        className="absolute top-1.5 right-1.5 p-1 bg-[#3D3A45]/80 hover:bg-[#3D3A45] rounded-full text-white cursor-pointer transition-all active:scale-90 shadow-md"
                       >
                         <X size={10} />
                       </button>
@@ -555,20 +572,21 @@ export default function AddEntryDrawer({
               <motion.button
                 type="submit"
                 disabled={loading}
+                whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-4 bg-[#E5989B] hover:bg-[#B56576] text-white font-semibold rounded-2xl shadow-[0_4px_20px_0_rgba(229,152,155,0.25)] hover:shadow-[0_4px_25px_0_rgba(181,101,118,0.35)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-4"
+                className="w-full py-4.5 bg-gradient-to-tr from-[#E5989B] to-[#B56576] hover:from-[#B56576] hover:to-[#E5989B] text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-[0_6px_25px_0_rgba(229,152,155,0.35)] hover:shadow-[0_6px_30px_0_rgba(181,101,118,0.45)] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 mt-4"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span className="text-sm font-semibold">
-                      {uploading ? 'Görseller Sıkıştırılıyor & Yükleniyor...' : 'Anı Kaydediliyor...'}
+                    <span className="text-xs font-extrabold tracking-wider">
+                      {uploading ? 'Görseller WebP Sıkıştırılıyor...' : 'Anı Kaydediliyor...'}
                     </span>
                   </div>
                 ) : (
                   <>
                     <span>Haritaya Ekle</span>
-                    <Heart size={16} fill="currentColor" />
+                    <Heart size={14} fill="currentColor" className="animate-pulse" />
                   </>
                 )}
               </motion.button>
