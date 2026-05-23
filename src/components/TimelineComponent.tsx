@@ -315,7 +315,7 @@ export default function TimelineComponent({
   const hasActiveFilters = selectedYear !== 'all' || selectedMonth !== 'all' || startDate !== '' || endDate !== '' || searchTerm !== ''
 
   return (
-    <div className="flex-1 w-full max-w-2xl mx-auto px-4 py-6 flex flex-col text-[#3D3A45] relative scrollbar-none">
+    <div className="flex-1 w-full max-w-2xl mx-auto px-4 pt-6 pb-36 flex flex-col text-[#3D3A45] relative scrollbar-none">
       
       {/* 🌟 Görünüm Seçici Başlık Barı (Zaman Tüneli / Galeri) */}
       <div className="flex items-center justify-between mb-6 shrink-0 pt-20 sm:pt-24">

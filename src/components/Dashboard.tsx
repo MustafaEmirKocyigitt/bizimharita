@@ -511,7 +511,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 w-full h-full pt-24 pb-24 overflow-y-auto"
+              className="flex-1 w-full h-full pt-24 pb-36 overflow-y-auto"
             >
               <WishlistComponent
                 profile={myProfile}
@@ -527,7 +527,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col items-center justify-start p-6 pt-24 pb-24 overflow-y-auto h-full"
+              className="flex-1 flex flex-col items-center justify-start p-6 pt-24 pb-36 overflow-y-auto h-full"
             >
               <div className="w-full max-w-md backdrop-blur-md bg-white/70 border border-white/50 p-8 rounded-3xl shadow-sm space-y-6 text-center relative overflow-hidden my-auto">
                 <AnimatePresence mode="wait">
@@ -654,7 +654,7 @@ export default function Dashboard({ profile }: { profile: Profile }) {
       </main>
 
       {/* Alt Navigasyon Barı (Bottom Navigation) - Yüzen Premium Aşk Adası (Floating Capsule - Dokunsal) */}
-      <div className="fixed bottom-5 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-40 shrink-0">
+      <div className="fixed bottom-3 left-3.5 right-3.5 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-40 shrink-0">
         <nav className="relative shadow-clay-card border-stitched px-3 sm:px-5 py-2.5 flex justify-between items-center rounded-3xl">
           
           <motion.button
